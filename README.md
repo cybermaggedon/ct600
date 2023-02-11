@@ -94,6 +94,12 @@ The output is verbose.  You'll know if the submission was successful.
 If there are errors, the output is not parsed particularly well, but there
 will be clues about what the errors are.
 
+If the submission works, you can use this repo to take the form values
+file and overlay the data on a CT600 PDF file as a record of what you
+submitted:
+
+https://github.com/cybermaggedon/ct600-fill
+
 ## Status
 
 This is a command-line utility, which has been tested with the HMRC test API,
