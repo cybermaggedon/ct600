@@ -753,7 +753,10 @@ ct600:
   955: Stephen Sprinky
 
   # enter the address of the nominated person
-  960: 34, The Larks, Minchinhampton, France
+  960:
+  - 34, The Larks
+  - Minchinhampton
+  - England
 
   # enter your reference for the nominated person
   965: 12414/a//a

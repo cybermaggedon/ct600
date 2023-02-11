@@ -3,6 +3,7 @@
 from lxml import etree as ET
 import base64
 from . computations import Computations
+import sys
 
 nsmap = {
     "http://www.hmrc.gov.uk/schemas/ct/comp/2021-01-01": "ct-comp",
@@ -88,27 +89,46 @@ class InputBundle:
         return str(val)
 
     def irheader(self):
-        return {
-            "Keys": {
-                "Key": self.box(3),
-            },
-            "PeriodEnd": self.date(35),
-            "Principal": {
-                "Contact": {
-                    "Name": {
-                        "Ttl": self.params.get("title"),
-                        "Fore": self.params.get("first-name"),
-                        "Sur": self.params.get("second-name")
-                    },
-                    "Email": self.params.get("email"),
-                    "Telephone": {
-                        "Number": self.params.get("phone")
-                    }
-                }
-            },
-            "IRmark": "",
-            "Sender": "Company"
-        }
+
+        irheader = ET.Element(
+            "{%s}%s" % (ct_ns, "IRheader"),
+            nsmap={"ct": ct_ns}
+        )
+
+        keys = ET.SubElement(irheader, "{%s}%s" % (ct_ns, "Keys"))
+
+        ET.SubElement(
+            keys, "{%s}%s" % (ct_ns, "Key"), Type="UTR"
+        ).text = str(self.box(3))
+
+        ET.SubElement(
+            irheader, "{%s}%s" % (ct_ns, "PeriodEnd")
+        ).text = str(self.date(35))
+
+        principal = ET.SubElement(irheader, "{%s}%s" % (ct_ns, "Principal"))
+        contact = ET.SubElement(principal, "{%s}%s" % (ct_ns, "Contact"))
+        name = ET.SubElement(contact, "{%s}%s" % (ct_ns, "Name"))
+        ET.SubElement(
+            name, "{%s}%s" % (ct_ns, "Ttl")
+        ).text = self.params.get("title")
+        ET.SubElement(
+            name, "{%s}%s" % (ct_ns, "Fore")
+        ).text = self.params.get("first-name")
+        ET.SubElement(
+            name, "{%s}%s" % (ct_ns, "Sur")
+        ).text = self.params.get("second-name")
+        ET.SubElement(
+            contact, "{%s}%s" % (ct_ns, "Email")
+        ).text = self.params.get("email")
+        tel = ET.SubElement(contact, "{%s}%s" % (ct_ns, "Telephone"))
+        ET.SubElement(
+            tel, "{%s}%s" % (ct_ns, "Number")
+        ).text = self.params.get("phone")
+
+        ET.SubElement(irheader, "{%s}%s" % (ct_ns, "IRmark")).text = ""
+        ET.SubElement(irheader, "{%s}%s" % (ct_ns, "Sender")).text = "Company"
+
+        return irheader
 
     def get_return(self):
 
@@ -463,7 +483,6 @@ class InputBundle:
 
                         # FIXME
                         "Line": Box(960),
-                        "Line": "FIXME",
 
                         # FIXME: AdditionalLine
                         # FIXME: PostCode
@@ -493,79 +512,70 @@ class InputBundle:
             }
         }
 
-        def addit(obj, tree):
+        mapping2 = {
+            "CompanyInformation": {
+                "CompanyName": Box(1),
+                "RegistrationNumber": Box(2),
+                "Reference": Box(3),
+                "CompanyType": Box(4, kind="companytype"),
+                "NorthernIreland": {
+                    "NItradingActivity": Box(5, kind="yesno"),
+                    "SME": Box(6, kind="yesno"),
+                    "NIemployer": Box(7, kind="yesno"),
+                    "SpecialCircumstances": Box(8, kind="yesno"),
+                },
+                "PeriodCovered": {
+                    "From": Box(30, kind="date"),
+                    "To": Box(35, kind="date"),
+                }
+            }
+        }
+
+        ctr = ET.Element(
+            "{%s}%s" % (ct_ns, "CompanyTaxReturn"),
+            nsmap={"ct": ct_ns}
+        )
+
+        def add_to_tree(root, tree):
 
             for key, value in tree.items():
 
                 if type(value) == dict:
 
-                    obj2 = {}
-                    addit(obj2, value)
-                    if len(obj2.keys()) > 0:
-                        obj[key] = obj2
+                    tag = "{%s}%s" % (ct_ns, key)
+                    elt = ET.SubElement(root, tag)
+                    add_to_tree(elt, value)
 
                 elif isinstance(value, Box):
+
                     if value.present(self):
-                        obj[key] = value.get(self)
 
-                elif type(value) == list:
-                    obj[key] = []
+                        tag = "{%s}%s" % (ct_ns, key)
+                        
+                        eltval = value.get(self)
 
-                    for elt in value:
+                        if isinstance(eltval, list):
+                            for it in eltval:
+                                itval = str(it)
+                                ET.SubElement(root, tag).text = itval
 
-                        if isinstance(elt, Box):
-                            obj[key].append(elt.get(self))
                         else:
+                            eltval = str(eltval)
+                            ET.SubElement(root, tag).text = eltval
 
-                            obj2 = {}
-                            addit(obj2, elt)
-                            obj[key].append(obj2)
+        add_to_tree(ctr, mapping)
 
-        ctr = {}
-        addit(ctr, mapping)
-
-        ret = {
-            "IRenvelope": {
-                "IRheader": self.irheader(),
-                "CompanyTaxReturn": ctr
-            }
-        }
-
-
-        relt_name = list(ret.keys())[0]
-        root = ET.Element(
-            "{%s}%s" % (ct_ns, relt_name),
-            nsmap={"ct": ct_ns}
+        irenv = ET.Element(
+            "{%s}%s" % (ct_ns, "IRenvelope"), nsmap={"ct": ct_ns}
         )
 
-        relt = ret[relt_name]
-
-        def add(root, relt):
-            
-            for name in relt:
-
-                tag = "{%s}%s" % (ct_ns, name)
-                value = relt[name]
-
-                if isinstance(relt[name], dict):
-                    sub = ET.SubElement(root, tag)
-                    add(sub, value)
-                else:
-                    ET.SubElement(root, tag).text = str(value)
-
-        add(root, relt)
+        irenv.append(self.irheader())
+        irenv.append(ctr)
 
         # CompanyTaxReturn needs an attribute
-        root.find(".//{%s}CompanyTaxReturn[1]" % ct_ns).set(
+        irenv.find(".//{%s}CompanyTaxReturn[1]" % ct_ns).set(
             "ReturnType", "new"
         )
 
-        # Key needs a UTR type attribute
-        root.find(".//{%s}Key[1]" % ct_ns).set(
-            "Type", "UTR"
-        )
-
-        attf_elt = root.find(".//{%s}AttachedFiles" % ct_ns)
-
-        return ET.ElementTree(root)
+        return ET.ElementTree(irenv)
 
