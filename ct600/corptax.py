@@ -543,8 +543,10 @@ class InputBundle:
                 if type(value) == dict:
 
                     tag = "{%s}%s" % (ct_ns, key)
-                    elt = ET.SubElement(root, tag)
+                    elt = ET.Element(tag)
                     add_to_tree(elt, value)
+                    if len(elt) > 0:
+                        root.append(elt)
 
                 elif isinstance(value, Box):
 
