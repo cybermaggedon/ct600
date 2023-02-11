@@ -1,0 +1,772 @@
+ct600:
+
+  # Company name
+  1: Example Biz Ltd.
+
+  # Company registration number
+  2: 12345678
+
+  # Tax reference
+  3: 8596148860
+
+  # Type of company
+  4: 06
+
+  5: true
+  6: true
+  7: true
+  8: true
+
+  # Start of return
+  30: 2020-01-01
+
+  # End of return
+  35: 2020-12-31
+
+  # Repayments this period
+  40: true
+
+  # Affects earlier period
+  45: true
+
+  # Making more than one return now
+  50: true
+
+  # Estimated figures
+  55: true
+
+  # Company part of a group that is not small
+  60: true
+
+  # Notice of disclosable avoidance schemes
+  65: true
+
+  # Compensating adjustment claimed
+  70: true
+
+  # Company qualifies for SME exemption
+  75: true
+
+  # Attached accounts and computations for this period
+  80: true
+
+  # Attached accounts and computations for a different period
+  85: 
+
+  # Reason for not attaching accounts
+  90: 
+
+  # CT600A - Loans and arrangements
+  95: true
+
+  # CT600B - Controlled foreign companies
+  100: true
+
+  # CT600C - Group & consortium
+  105: true
+
+  # CT600D - Insurance
+  110: true
+
+  # CT600E - CASCs
+  115: true
+
+  # CT600F - Tonnage tax
+  120: true
+
+  # CT600G - Northern Ireland
+  125: true
+
+  # CT600H - Cross-border royalties
+  130: true
+
+  # CT600I - Ring fence trades
+  135: true
+
+  # CT600J - Tax avoidance schemes
+  140:  true
+
+  # CT600K - Restitution
+  141:  true
+
+  # CT600L - R&D
+  142:  true
+
+  # CT600M - Freeports
+  143:  true
+
+  # Total turnover from trade
+  145: 11218.23
+
+  # Banks and other financial concerns
+  150: 
+
+  # Trading profits
+  155: 748.23
+
+  # Trading losses brought forward against profits
+  160: 103951
+
+  # Net trading profits
+  165: 748.23
+
+  # Bank, building society or other interest, and profits from non-trading loan
+  # relationships
+  170: 103951
+
+  # Box 170 net of carrying back deficit
+  172: true
+
+  # Annual payments not otherwise charged to Corporation Tax and from which
+  # Income Tax has not been deducted
+  175: 103951
+
+  # Non-exempt dividends or distributions from non-UK resident companies
+  180: 103951
+
+  # Income from which Income Tax has been deducted
+  185: 103951
+
+  # Income from a property business
+  190: 103951
+
+  # Non-trading gains on intangible fixed assets
+  195: 103951
+
+  # Tonnage Tax profits
+  200: 103951
+
+  # Income not falling under any other heading
+  205: 103951
+
+  # Gross chargeable gains
+  210: 103951
+
+  # Allowable losses including losses brought forward
+  215: 103951
+
+  # Net chargeable gains
+  220: 103951
+
+  # Losses brought forward against certain investment income
+  225: 103951
+
+  # Non-trade deficits on loan relationships (including interest), and
+  # derivative contracts (financial instruments) brought forward set against
+  # non-trading profits
+  230: 103951
+
+  # Profits before other deductions and reliefs
+  235: 748.23
+
+  # Losses on unquoted shares
+  240: 103951
+
+  # Management expenses
+  245: 103951
+
+  # UK property business losses for this or previous accounting period
+  250: 103951
+
+  # Capital allowances for the purpose of management of the business
+  255: 103951
+
+  # Non-trade deficits for this accounting period from loan relationships and
+  # derivative contracts (financial instruments)
+  260: 103951
+
+  # Carried forward non-trade deficits from loan relationships and derivative
+  # contracts (financial instruments)
+  263: 103951
+
+  # Non-trading losses on intangible fixed assets
+  265: 103951
+
+  # Trading losses of this or a later accounting period
+  275: 103951
+
+  # Put an X in box 280 if amounts carried back from later accounting periods
+  # are included in box 275
+  280: true
+
+  # Trading losses carried forward and claimed against total profits
+  285: 103951
+
+  # Non-trade capital allowances
+  290: 103951
+
+  # Total of deductions and reliefs
+  295: 103951
+
+  # Profits before qualifying donations and group relief
+  300: 748.23
+
+  # Qualifying donations
+  305: 103951
+
+  # Group relief
+  310: 103951
+
+  # Group relief for carried forward losses
+  312: 103951
+
+  # Profits chargeable to Corporation Tax
+  315: 748.23
+
+  # Ring fence profits included
+  320: 103951
+
+  # Northern Ireland profits included
+  325: 103951
+
+  # FY1
+  330: 2019
+
+  # FY1 Profit 1
+  335: 186.23
+
+  # FY1 Rate of Tax 1
+  340: 19.23
+
+  # FY1 Tax 1
+  345: 35.34
+
+  # FY1 Profit 2
+  350: 51251.12
+
+  # FY1 Rate of Tax 2
+  355: 55
+
+  # FY1 Tax 2
+  360: 
+
+  # FY1 Profit 3
+  365: 125155.15
+
+  # FY1 Rate of Tax 3
+  370: 56
+
+  # FY1 Tax 3
+  375: 1525125.55
+
+  # FY2
+  380: 2020
+
+  # FY2 Profit 1
+  385: 562.23
+
+  # FY2 Rate of Tax 1
+  390: 19.23
+
+  # FY2 Tax 1
+  395: 106.78
+
+  # FY2 Profit 2
+  400: 2515125
+
+  # FY2 Rate of Tax 2
+  405: 12
+
+  # FY2 Tax 2
+  410: 23
+
+  # FY2 Profit 3
+  415: 12512515
+
+  # FY2 Rate of Tax 3
+  420: 55
+
+  # FY2 Tax 3
+  425: 1251525.55
+
+  # Corporation Tax
+  430: 142.12
+
+  # Marginal relief for ring fence trades
+  435: 1241224.14
+
+  # Corporation Tax chargeable
+  440: 142.12
+
+  # Community Investment relief
+  445: 11224.22
+
+  # Double Taxation Relief
+  450: 124214.51
+
+  # Put an X in box 455 if box 450 includes an underlying Rate relief claim
+  455: true
+
+  # Put an X in box 460 if box 450 includes any amount carried back from a
+  # later period
+  460: true
+
+  # Advance Corporation Tax
+  465: 12424.14
+
+  # Total reliefs and deduction in terms of tax
+  470: 11224.14
+
+  # CJRS and Job Support Scheme received
+  471: 1241224.14
+
+  # CJRS and Job Support Scheme entitlement
+  472: 1224.14
+
+  # CJRS overpayment already assessed or voluntary disclosed
+  473: 11224.14
+
+  # Other Coronavirus overpayments
+  474: 1241224.14
+
+  # Net Corporation Tax liability
+  475: 142.12
+
+  # Tax payable on loans and arrangements to participators
+  480: 12224.14
+
+  # Put an X in box 485 if you completed box A70 in the supplementary pages
+  # CT600A
+  485: true
+
+  # CFC tax payable
+  490: 1241224.14
+
+  # Bank Levy payable
+  495: 1241224.14
+
+  # Bank surcharge payable
+  496: 1241224.14
+
+  # CFC tax and bank Levy payable
+  500: 1241224.14
+
+  # Supplementary charge (ring fence trades) payable
+  505: 1241224.14
+
+  # Tax chargeable
+  510: 142.12
+
+  # Income Tax deducted from gross income included in profits
+  515: 1241224.14
+
+  # Income Tax repayable to the company
+  520: 1241224.14
+
+  # Self-assessment of tax payable before restitution tax and coronavirus
+  # support scheme overpayments
+  525: 1241224.14
+
+  # Coronavirus support schemes overpayment now due
+  526: 1241224.14
+
+  # Restitution tax
+  527: 1241224.14
+
+  # Self-assessment of tax payable
+  528: 142.12
+
+  # Research and Development credit
+  530: 1241224.14
+
+  # Not currently used
+  535: 1241224.14
+
+  # Creative tax credit
+  540: 1241224.14
+
+  # Total of R&D credit and creative tax credit
+  545: 1241224.14
+
+  # Land remediation tax credit
+  550: 1241224.14
+
+  # Life assurance company tax credit
+  555: 1241224.14
+
+  # Total land remediation and life assurance company tax credit
+  560: 1241224.14
+
+  # Capital allowances first-year tax credit
+  565: 1241224.14
+
+  # Surplus Research and Development credits or creative tax credit payable
+  570: 1241224.14
+
+  # Land remediation or life assurance company tax credit payable
+  575: 1241224.14
+
+  # Capital allowances first-year tax credit payable
+  580: 1241224.14
+
+  # Ring fence Corporation Tax included and 590 Ring fence supplementary charge
+  # included
+  585: 1241224.14
+
+  # NI Corporation Tax included
+  586: 1241224.14
+
+  # Tax already paid (and not already repaid)
+  590: 1241224.14
+
+  # Tax already paid (and not already repaid)
+  595: 1241224.14
+
+  # Tax outstanding
+  600: 1241224.14
+
+  # Tax overpaid including surplus or payable credits
+  605: 1241224.14
+
+  # Group tax refunds surrendered to this company
+  610: 1241224.14
+
+  # Research and Development expenditure credits surrendered to this company
+  615: 1241224.14
+
+  # Export: Yes — goods
+  616: true
+
+  # Export: Yes — services
+  617: true
+
+  # Export: No — neither
+  618: true
+
+  # Franked investment income/exempt ABGH distributions
+  620: 1241224.14
+
+  # Number of 51% group companies
+  625: 12412
+
+  # should have made (whether it has or not) instalment payments as a large
+  # company under the Corporation Tax (instalment Payments) Regulations 1998
+  630: true
+
+  # Should have made (whether it has or not) instalment payments as a very
+  # large company under the Corporation Tax (instalment Payments) Regulations
+  # 1998
+  631: true
+
+  # is within a group payments arrangement for the period
+  635: true
+
+  # has written down or sold intangible assets
+  640: true
+
+  # has made cross-border royalty payments
+  645: true
+
+  # Eat Out to Help Out Scheme: reimbursed discounts included as taxable income
+  647: 12412412
+
+  # Put an X in box 650 if the claim is made by a small or medium-sized
+  # enterprise (SME), including a SME subcontractor to a large company
+  650: True
+
+  # Put an X in box 655 if the claim is made by a large company
+  655: true
+
+  # R&D enhanced expenditure
+  660: 465.23
+
+  # Creative enhanced expenditure
+  665: 12412412
+
+  # R&D and creative enhanced expenditure
+  670: 465.23
+
+  # R&D enhanced expenditure of a SME on work sub contracted to it by a large
+  # company
+  675: 91231244.84
+
+  # Vaccines research expenditure
+  680: 91231244.84
+
+  # Enter the total enhanced expenditure
+  685: 91231244.84
+
+  # Annual investment allowance
+  690: 591.23
+
+  # Machinery/plant super-deduction — Capital allowances
+  691: 91231244.84
+
+  # Machinery/plant super-deduction — Balancing charges
+  692: 91231244.84
+
+  # Machinery and plant — special rate allowance — Capital allowances
+  693: 91231244.84
+
+  # Machinery and plant — special rate allowance — Balancing charges
+  694: 91231244.84
+
+  # Machinery and plant — special rate pool - Capital allowance
+  695: 91231244.84
+
+  # Machinery and plant — special rate pool - Balancing charges
+  700: 91231244.84
+
+  # Machinery and plant — main pool - Capital allowance
+  705: 91231244.84
+
+  # Machinery and plant — main pool - Balancing charges
+  710: 91231244.84
+
+  # Structures and buildings - Capital allowances
+  711: 91231244.84
+
+  # Business premises renovation - Capital allowances
+  715: 91231244.84
+
+  # Business premises renovation - Balancing charges
+  720: 91231244.84
+
+  # Other allowances and charges - Capital allowances
+  725: 91231244.84
+
+  # Other allowances and charges - Balancing charges
+  730: 91231244.84
+
+  # Electric charge points - Capital allowances
+  713: 91231244.84
+
+  # Electric charge points - Balancing charges
+  714: 91231244.84
+
+  # Enterprise zones - Capital allowances
+  721: 91231244.84
+
+  # Enterprise zones - Balancing charges
+  722: 91231244.84
+
+  # Zero emissions goods vehicles - Capital allowances
+  723: 91231244.84
+
+  # Zero emissions goods vehicles - Balancing charges
+  724: 91231244.84
+
+  # Zero emissions cars - Capital allowances
+  726: 91231244.84
+
+  # Zero emissions cars - Balancing charges
+  727: 91231244.84
+
+  # Annual Investment Allowance - Capital allowances
+  735: 91231244.84
+
+  # Structures and buildings
+  736: 91231244.84
+
+  # Business premises renovation - Capital allowances
+  740: 91231244.84
+
+  # Business premises renovation - Balancing charges
+  745: 91231244.84
+
+  # Machinery and plant — super-deduction - Capital allowances
+  741: 91231244.84
+
+  # Machinery and plant — super-deduction - Balancing charges
+  742: 91231244.84
+
+  # Machinery and plant — special rate allowance - Capital allowances
+  743: 91231244.84
+
+  # Machinery and plant — special rate allowance - Balancing charges
+  744: 91231244.84
+
+  # Other allowances and charges - Capital allowances
+  750: 91231244.84
+
+  # Other allowances and charges - Balancing charges
+  755: 91231244.84
+
+  # Electric charge points - Capital allowances
+  737: 91231244.84
+
+  # Electric charge points - Balancing charges
+  738: 91231244.84
+
+  # Enterprise Zones - Capital allowances
+  746: 91231244.84
+
+  # Enterprise Zones - Balancing charges
+  747: 91231244.84
+
+  # Zero emissions goods vehicles - Capital allowances
+  748: 91231244.84
+
+  # Zero emissions goods vehicles - Balancing charges
+  749: 91231244.84
+
+  # Zero emissions cars - Capital allowances
+  751: 91231244.84
+
+  # Zero emissions cars - Balancing charges
+  752: 91231244.84
+
+  # Machinery and plant on which first-year allowance is claimed
+  760: 91231244.84
+
+  # Designated environmentally friendly machinery and plant
+  765: 91231244.84
+
+  # Machinery and plant on long-life assets and integral features
+  770: 91231244.84
+
+  # Structures and buildings
+  771: 91231244.84
+
+  # Machinery and plant — super-deduction
+  772: 91231244.84
+
+  # Machinery and plant — special rate allowance
+  773: 91231244.84
+
+  # Other machinery and plant
+  775: 91231244.84
+
+  # Losses of trades carried on wholly or partly in the UK
+  780: 91231244.84
+
+  # Losses of trades carried on wholly or partly in the UK (maximum available
+  # for surrender as group relief)
+  785: 91231244.84
+
+  # Losses of trades carried on wholly outside the UK (amount)
+  790: 91231244.84
+
+  # Non-trade deficits on loan relationships and derivative contracts (amount)
+  795: 91231244.84
+
+  # Non-trade deficits on loan relationships and derivative contracts (maximum
+  # available for surrender as group relief)
+  800: 91231244.84
+
+  # UK property business losses (amount)
+  805: 91231244.84
+
+  # UK property business losses (maximum available for surrender as group
+  # relief)
+  810: 91231244.84
+
+  # Overseas property business losses (amount)
+  815: 91231244.84
+
+  # Losses from miscellaneous transactions (amount)
+  820: 91231244.84
+
+  # Capital losses (amount)
+  825: 91231244.84
+
+  # Non-trading losses on intangible fixed assets (amount)
+  830: 91231244.84
+
+  # Non-trading losses on intangible fixed assets (maximum available for
+  # surrender as group relief)
+  835: 91231244.84
+
+  # Non-trade capital allowances (maximum available for surrender as group
+  # relief)
+  840: 91231244.84
+
+  # Qualifying donations (maximum available for surrender as group relief)
+  845: 91231244.84
+
+  # Management expenses (amount)855 Management expenses (maximum available for
+  # surrender as group relief)
+  850: 91231244.84
+
+  855: 91231244.84
+
+  # Amount of group relief claimed which relates to NI trading losses used
+  # against rest of UK/mainstream profits
+  856: 91231244.84
+
+  # Amount of group relief claimed which relates to NI trading losses used
+  # against NI trading profits
+  857: 91231244.84
+
+  # Amount of group relief claimed which relates to rest of UK/mainstream
+  # losses used against NI trading profits
+  858: 91231244.84
+
+  # Small Repayments
+  860: 91231244.84
+
+  # Repayment of Corporation Tax
+  865: 91231244.84
+
+  # Repayment of Income Tax
+  870: 91231244.84
+
+  # Payable Research and Development Tax Credit
+  875: 91231244.84
+
+  # Payable research and development expenditure credit
+  880: 91231244.84
+
+  # Payable creative tax credit
+  885: 91231244.84
+
+  # Payable land remediation or life assurance company tax credit
+  890: 91231244.84
+
+  # Payable capital allowances first-year tax credit
+  895: 91231244.84
+
+  # The following amount is to be surrendered
+  900: 91231244.84
+
+  # Joint notice is attached
+  905: true
+
+  # Joint notice will follow
+  910: 
+
+  # Please stop repayment of the following amount until we send you the Notice
+  915: 91231244.84
+
+  # Name of bank or building society
+  920: The High Street Super Bank
+
+  # Branch sort code
+  925: 123465
+
+  # Account number
+  930: 01924809
+
+  # Name of account
+  935: MR M Bunches
+
+  # Building society reference
+  940: 092124/412/4/4145!
+
+  # enter your status, for example company secretary or authorised agent
+  945: Director of Stuff
+
+  # enter the name of your company
+  950: Clumbayah
+
+  # enter the name of the nominated person
+  955: 
+
+  # enter the address of the nominated person
+  960: 
+
+  # enter your reference for the nominated person
+  965: 
+
+  # enter your name
+  970: Bunches of The Same
+
+  # Name
+  975: Bunch McGochlan
+
+  # Date
+  980: 2020-01-01
+
+  # Status
+  985: Director of Ops
+
