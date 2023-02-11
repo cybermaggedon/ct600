@@ -259,6 +259,13 @@ def output_form_values(args):
         help = "\n  # ".join(textwrap.wrap(c.description, width=75))
         print("  # " + help)
 
+        # Special case hack for address.
+        if c.box == 960:
+            print("  960:")
+            print("  - Address line 1")
+            print("  - Address line 2")
+            continue
+
         if c.value is None:
             print("  " + str(c.box) + ": ")
         else:
