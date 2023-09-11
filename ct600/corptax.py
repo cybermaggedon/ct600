@@ -189,6 +189,7 @@ class InputBundle:
                     "CT600J": Box(140, kind="yesno"),
                     "CT600K": Box(141, kind="yesno"),
                     "CT600L": Box(142, kind="yesno"),
+                    "CT600N": Box(144, kind="yesno"),
                 }
             },
             "Turnover": {
@@ -246,6 +247,14 @@ class InputBundle:
                 "RingFenceProfitsIncluded": Box(320, kind="pounds"),
                 "NorthernIrelandProfitsIncluded": Box(325, kind="pounds"),
                 "CorporationTaxChargeable": {
+                    "AssociatedCompanies": {
+                        "ThisPeriod": Box(326),
+                        "AssociatedCompaniesFinancialYears": {
+                            "FirstYear": Box(327),
+                            "SecondYear": Box(328)
+                        },
+                        "StartingOrSmallCompaniesRate": Box(329, kind="yesno")
+                    },
                     "FinancialYearOne": {
                         "Year": Box(330, kind="year"),
                         "Details": {
@@ -290,7 +299,9 @@ class InputBundle:
                 "CFCtaxPayable": Box(490, kind="money"),
                 "BankLevyPayable": Box(495, kind="money"),
                 "BankSurchargePayable": Box(496, kind="money"),
+                "RPDTpayable": Box(497, kind="money"),
                 "CFCandBankLevyTotal": Box(500, kind="money"),
+                "EOGPLpayable": Box(501, kind="money"),
                 "SupplementaryCharge": Box(505, kind="money"),
                 "TaxChargeable": Box(510, kind="money"),
                 "IncomeTax": {
@@ -338,6 +349,9 @@ class InputBundle:
             "EnhancedExpenditure": {
                 "SMEclaim": Box(650, kind="yes"),
                 "LargeCompanyClaim": Box(655, kind="yes"),
+                "RAndDClaimNotificationForm": Box(656, kind="yesno"),
+                "AdditionalRAndDForm": Box(657, kind="yesno"),
+                "RAndDExpenditureSME": Box(659, kind="pounds"),
                 "RandDEnhancedExpenditure": Box(660, kind="pounds"),
                 "CreativeEnhancedExpenditure": Box(665, kind="pounds"),
                 "RandDAndCreativeEnhancedExpenditure": Box(670, kind="pounds"),
@@ -512,6 +526,9 @@ class InputBundle:
                         }
                     }
                 }
+            },
+            "EnergyProfitsLevy": {
+                "EOGPLamounts": Box(986, kind="pounds"),
             }
         }
 
