@@ -95,6 +95,9 @@ ct600:
   # CT600M - Freeports
   143:  true
 
+  # CT600N - Residential property developer tax
+  144: true
+
   # Total turnover from trade
   145: 11218.0
 
@@ -219,6 +222,19 @@ ct600:
   # Northern Ireland profits included
   325: 103951
 
+  # Number of associated companies in this period
+  326: 123
+
+  # Number of associated companies in the first financial year
+  327: 123
+
+  # Number of associated companies in the second financial year
+  328: 123
+
+  # Put an X in the box if the company is chargeable at the small profit rate
+  # or is entitled to marginal relief
+  329: true
+
   # FY1
   330: 2019
 
@@ -238,7 +254,7 @@ ct600:
   355: 55
 
   # FY1 Tax 2
-  360: 
+  360: 11214.44
 
   # FY1 Profit 3
   365: 125155.15
@@ -319,6 +335,9 @@ ct600:
   # Other Coronavirus overpayments
   474: 1241224.14
 
+  # Energy (Old and Gas) Profits Levy
+  986: 12512515
+
   # Net Corporation Tax liability
   475: 142.12
 
@@ -338,8 +357,14 @@ ct600:
   # Bank surcharge payable
   496: 1241224.14
 
+  # Residential Property Developer Tax repayable
+  497: 12412414.41
+
   # CFC tax and bank Levy payable
   500: 1241224.14
+
+  # EOGPL payable
+  501: 1241224.14
 
   # Supplementary charge (ring fence trades) payable
   505: 1241224.14
@@ -467,8 +492,17 @@ ct600:
   # Put an X in box 655 if the claim is made by a large company
   655: true
 
+  # Put an ‘X’ to confirm that a R&D claim notification form has been submitted
+  656: true
+
+  # Put an ‘X’ to confirm that an additional information form has been submitted
+  657: true
+
   # R&D enhanced expenditure
-  660: 465.0
+  659: 144465
+
+  # R&D enhanced expenditure
+  660: 465094
 
   # Creative enhanced expenditure
   665: 12412412
