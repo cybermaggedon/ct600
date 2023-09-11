@@ -41,6 +41,9 @@ class Box:
         if self.kind == "money":
             return "%.2f" % value
 
+        if self.kind == "rate":
+            return "%.2f" % value
+
         if self.kind == "pounds":
             return "%.2f" % int(value)
 
