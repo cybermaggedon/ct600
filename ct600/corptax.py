@@ -599,5 +599,27 @@ class InputBundle:
             "ReturnType", "new"
         )
 
+        attchs = irenv.find(".//{%s}AttachedFiles[1]" % ct_ns)
+
+        for f in self.atts:
+
+            raw = self.atts[f]
+            body = base64.b64encode(raw).decode("utf-8")
+
+            att = ET.Element(
+                "{%s}%s" % (ct_ns, "Attachment"),
+                nsmap={"ct": ct_ns}
+            )
+
+            att.text = body
+
+            att.set("Filename", f)
+            att.set("Description", "supporting document")
+            att.set("Format", "pdf")
+            att.set("Size", str(len(raw)))
+            att.set("Type", "other")
+
+            attchs.append(att)
+
         return ET.ElementTree(irenv)
 
