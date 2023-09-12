@@ -6,9 +6,9 @@ from . computations import Computations
 import sys
 
 nsmap = {
-    "http://www.hmrc.gov.uk/schemas/ct/comp/2021-01-01": "ct-comp",
+    "http://www.hmrc.gov.uk/schemas/ct/comp/2023-01-01": "ct-comp",
     "http://www.hmrc.gov.uk/schemas/ct/dpl/2021-01-01": "dpl",
-    "http://xbrl.frc.org.uk/fr/2021-01-01/core": "uk-core"
+    "http://xbrl.frc.org.uk/fr/2023-01-01/core": "uk-core"
 }
 
 ct_ns = "http://www.govtalk.gov.uk/taxation/CT/5"

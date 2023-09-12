@@ -20,7 +20,9 @@ hints = {
     "http://www.w3.org/2000/09/xmldsig#": "xmldsig-core-schema.xsd"
 }
 
-ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-96.xsd"))
+# ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-96.xsd"))
+
+ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-991.xsd"))
 
 env_schema = xmlschema.XMLSchema("schema/envelope-v2-0-HMRC.xsd",
                                  base_url=".", locations=hints)
