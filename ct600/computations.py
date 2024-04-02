@@ -351,7 +351,7 @@ class Computations:
         return self.value(val)
 
     def type_of_company(self):
-        return 6
+        return 0
 
     def repayment(self):
         return False

@@ -22,7 +22,11 @@ class Box:
         if self.id in obj.form_values["ct600"]:
 
             value = obj.form_values["ct600"][self.id]
+
             if value == None:
+                return False
+
+            if self.kind == "yes" and not value:
                 return False
 
             return True
@@ -156,7 +160,7 @@ class InputBundle:
                 }
             },
             "ReturnInfoSummary": {
-                "ThisPeriod": Box(40, kind="yesno"),
+                "ThisPeriod": Box(40, kind="yes"),
                 "EarlierPeriod": Box(45, kind="yesno"),
                 "MultipleReturns": Box(50, kind="yesno"),
                 "ProvisionalFigures": Box(55, kind="yesno"),
