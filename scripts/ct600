@@ -374,7 +374,7 @@ def main():
     parser.add_argument('--form-values', '--ct600', '-f', required=False,
                         help='CT600 form values YAML file')
     parser.add_argument('--attachment', '-m', required=False, action='append',
-                        help='Corporation tax computations iXBRL file')
+                        help='Extra attachment to include with filing e.g. PDF')
     parser.add_argument('--output-ct', '-p',
                         action="store_true", default=False,
                         help='Just output CT message, no submission')
