@@ -332,13 +332,15 @@ class Computations:
 
     def sme_rnd_expenditure_deduction(self):
 
-        val = self.trade_period_context().values[
-            ET.QName(CT_NS,
-                     "AdjustmentsAdditionalDeductionForQualifyingRDExpenditureSME"
-            )
-        ]
-
-        return self.value(val)
+        try:
+            val = self.trade_period_context().values[
+                ET.QName(CT_NS,
+                         "AdjustmentsAdditionalDeductionForQualifyingRDExpenditureSME"
+                         )
+            ]
+            return self.value(val)
+        except:
+            return None
 
     def investment_allowance(self):
 
