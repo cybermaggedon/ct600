@@ -459,9 +459,9 @@ class Computations:
             Definition(320, "Ring fence profits included"),
             Definition(325, "Northern Ireland profits included"),
             Definition(326, "Number of associated companies in this period"),
-            Definition(327, "Number of associated companies in the 1st FY")
-            Definition(328, "Number of associated companies in the 2nd FY")
-            Definition(329, "Chargeable at the small profit rate")
+            Definition(327, "Number of associated companies in the 1st FY"),
+            Definition(328, "Number of associated companies in the 2nd FY"),
+            Definition(329, "Chargeable at the small profit rate"),
             Definition(330, "FY1").set(self.fy1()),
             Definition(335, "FY1 Profit 1").set(self.fy1_profit()),
             Definition(340, "FY1 Rate of Tax 1").set(self.fy1_tax_rate()),
