@@ -404,6 +404,7 @@ class Computations:
             Definition(141, "CT600K - Restitution"),
             Definition(142, "CT600L - R&D"),
             Definition(143, "CT600M - Freeports"),
+            Definition(144, "CT600N - Residential property developer tax"),
             Definition(145, "Total turnover from trade").set(
                 self.turnover_revenue()
             ),
@@ -457,6 +458,10 @@ class Computations:
             ),
             Definition(320, "Ring fence profits included"),
             Definition(325, "Northern Ireland profits included"),
+            Definition(326, "Number of associated companies in this period"),
+            Definition(327, "Number of associated companies in the 1st FY")
+            Definition(328, "Number of associated companies in the 2nd FY")
+            Definition(329, "Chargeable at the small profit rate")
             Definition(330, "FY1").set(self.fy1()),
             Definition(335, "FY1 Profit 1").set(self.fy1_profit()),
             Definition(340, "FY1 Rate of Tax 1").set(self.fy1_tax_rate()),
@@ -494,6 +499,7 @@ class Computations:
             Definition(472, "CJRS and Job Support Scheme entitlement"),
             Definition(473, "CJRS overpayment already assessed or voluntary disclosed"),
             Definition(474, "Other Coronavirus overpayments"),
+            Definition(986, "Energy (Oil and Gas) Profits Levy"),
             Definition(475, "Net Corporation Tax liability").set(
                 self.corporation_tax_chargeable()
             ),
@@ -502,7 +508,9 @@ class Computations:
             Definition(490, "CFC tax payable"),
             Definition(495, "Bank Levy payable"),
             Definition(496, "Bank surcharge payable"),
+            Definition(497, "Residential Property Developer Tax repayable"),
             Definition(500, "CFC tax and bank Levy payable"),
+            Definition(501, "EOGPL payable"),
             Definition(505, "Supplementary charge (ring fence trades) payable"),
             Definition(510, "Tax chargeable").set(
                 self.tax_chargeable()
@@ -554,6 +562,9 @@ class Computations:
             Definition(647, "Eat Out to Help Out Scheme: reimbursed discounts included as taxable income"),
             Definition(650, "Put an X in box 650 if the claim is made by a small or medium-sized enterprise (SME), including a SME subcontractor to a large company").set(True),
             Definition(655, "Put an X in box 655 if the claim is made by a large company"),
+            Definition(656, "An R&D claim notification form has been submitted"),
+            Definition(657, "An additional information form has been submitted"),
+            Definition(659, "R&D expenditure qualifying for SME R&D relief"),
             Definition(660, "R&D enhanced expenditure").set(
                 self.sme_rnd_expenditure_deduction()
             ),
