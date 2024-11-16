@@ -56,7 +56,7 @@ def check_schemas(accts, comps):
     for s in schema:
         if s.startswith("https://xbrl.frc.org.uk/FRS-"):
             found_frc = True
-        if s.startswith("http://www.hmrc.gov.uk/schemas/ct/dpl/"):
+        if s.startswith("https://xbrl.frc.org.uk/dpl/"):
             found_dpl = True
 
     schema = get_schema(comps)
@@ -64,7 +64,7 @@ def check_schemas(accts, comps):
     for s in schema:
         if s.startswith("http://www.hmrc.gov.uk/schemas/ct/comp/"):
             found_ct = True
-        if s.startswith("http://www.hmrc.gov.uk/schemas/ct/dpl/"):
+        if s.startswith("https://xbrl.frc.org.uk/dpl/"):
             found_dpl = True
 
     if not found_dpl:
