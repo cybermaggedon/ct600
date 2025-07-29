@@ -21,6 +21,7 @@ dependencies = [
     "py-dmidecode",
     "requests",
     "ixbrl-parse",
+    "pyaml",
 ]
 
 [project.urls]
