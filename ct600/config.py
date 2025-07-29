@@ -47,8 +47,8 @@ class CT600Config:
             raise ConfigurationError("gateway-test must be a boolean value")
         
         # Validate URL format
-        url = config_data.get("url", "")
-        if not url.startswith(("http://", "https://")):
+        url = config_data.get("url")
+        if not url or not str(url).startswith(("http://", "https://")):
             raise ConfigurationError("url must be a valid HTTP/HTTPS URL")
     
     def get(self, key: str, default: Any = None) -> Any:

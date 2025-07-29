@@ -264,7 +264,7 @@ class TestCT600Config:
 class TestLoadConfig:
     """Test load_config function."""
     
-    @patch('ct600.config.load_config_file')
+    @patch('ct600.file_operations.load_config_file')
     def test_load_config_success(self, mock_load_config_file):
         """Test successful config loading."""
         config_data = {
@@ -283,7 +283,7 @@ class TestLoadConfig:
         assert config.get("username") == "test_user"
         mock_load_config_file.assert_called_once_with("test_config.json")
     
-    @patch('ct600.config.load_config_file')
+    @patch('ct600.file_operations.load_config_file')
     def test_load_config_default_file(self, mock_load_config_file):
         """Test config loading with default file."""
         config_data = {
@@ -301,7 +301,7 @@ class TestLoadConfig:
         assert isinstance(config, CT600Config)
         mock_load_config_file.assert_called_once_with("config.json")  # Default
     
-    @patch('ct600.config.load_config_file')
+    @patch('ct600.file_operations.load_config_file')
     def test_load_config_configuration_error(self, mock_load_config_file):
         """Test config loading with configuration error."""
         config_data = {
@@ -318,7 +318,7 @@ class TestLoadConfig:
         assert exc_info.value.config_file == "test_config.json"
         assert "Missing required configuration keys" in str(exc_info.value)
     
-    @patch('ct600.config.load_config_file')
+    @patch('ct600.file_operations.load_config_file')
     def test_load_config_file_operation_error(self, mock_load_config_file):
         """Test config loading with file operation error."""
         from ct600.exceptions import FileOperationError

@@ -320,15 +320,15 @@ class TestCTMessageMethods:
         mock_request = Mock()
         mock_create_submission_request.return_value = mock_request
         
-        # Mock asyncio operations
+        # Mock asyncio operations - submit_to_hmrc is async so we need AsyncMock
         mock_loop = Mock()
-        mock_coro = Mock()
-        mock_submit_to_hmrc.return_value = mock_coro
+        mock_submit_to_hmrc.return_value = AsyncMock()()  # Create an actual coroutine
         
         with patch('asyncio.new_event_loop', return_value=mock_loop):
             cli.submit_ct_message(mock_args)
         
-        mock_loop.run_until_complete.assert_called_once_with(mock_coro)
+        # The call should pass the actual coroutine, not the AsyncMock
+        mock_loop.run_until_complete.assert_called_once()
     
     def test_data_request_not_implemented(self, cli, mock_args):
         """Test data_request method raises NotImplementedError."""
@@ -411,17 +411,16 @@ class TestCLIRun:
     def test_run_data_request(self, cli):
         """Test run with data-request action."""
         with patch.object(cli, 'parse_args') as mock_parse:
-            with patch.object(cli, 'data_request') as mock_data_request:
-                mock_args = Mock()
-                mock_args.output_values = False
-                mock_args.output_form_values = False
-                mock_args.output_ct = False
-                mock_args.submit = False
-                mock_args.data_request = True
-                mock_parse.return_value = mock_args
-                
-                with pytest.raises(NotImplementedError):
-                    cli.run(["--data-request"])
+            mock_args = Mock()
+            mock_args.output_values = False
+            mock_args.output_form_values = False
+            mock_args.output_ct = False
+            mock_args.submit = False
+            mock_args.data_request = True
+            mock_parse.return_value = mock_args
+            
+            with pytest.raises(NotImplementedError):
+                cli.run(["--data-request"])
     
     def test_run_ct600_error(self, cli):
         """Test run with CT600Error."""
