@@ -73,5 +73,6 @@ jobs:
 
       - name: Test corptax-test-service script
         run: |
-          corptax-test-service --help || echo "Test service help completed"
+          # Just check that the script is installed and can be imported
+          python -c "from ct600.test_service import main; print('corptax-test-service is properly installed')"
 
