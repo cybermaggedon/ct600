@@ -301,41 +301,43 @@ class TestCTMessageMethods:
         
         mock_print.assert_called_with("<xml>pretty</xml>")
     
-    @patch('ct600.cli.CT600CLI.create_bundle')
-    @patch('ct600.cli.load_config')
-    @patch('ct600.cli.create_submission_request')
-    @patch('ct600.cli.submit_to_hmrc')
-    def test_submit_ct_message(self, mock_submit_to_hmrc, mock_create_submission_request,
-                              mock_load_config, mock_create_bundle, cli, mock_args):
+    def test_submit_ct_message(self, cli, mock_args):
         """Test submit_ct_message method."""
-        # Set up mocks
-        mock_bundle = Mock()
-        mock_bundle.form_values = {"ct600": {3: "1234567890"}}
-        mock_bundle.get_return.return_value = Mock()
-        mock_create_bundle.return_value = mock_bundle
-        
-        mock_config = Mock()
-        mock_load_config.return_value = mock_config
-        
-        mock_request = Mock()
-        mock_create_submission_request.return_value = mock_request
-        
-        # Mock asyncio operations
-        mock_loop = Mock()
-        
-        # Create a Future that represents the completed coroutine
-        import asyncio
-        mock_future = asyncio.Future()
-        mock_future.set_result(None)
-        
-        # Mock submit_to_hmrc to return the future (which run_until_complete can handle)
-        mock_submit_to_hmrc.return_value = mock_future
-        
-        with patch('asyncio.new_event_loop', return_value=mock_loop):
-            cli.submit_ct_message(mock_args)
-        
-        # Verify run_until_complete was called with our mock future
-        mock_loop.run_until_complete.assert_called_once_with(mock_future)
+        with patch('ct600.cli.CT600CLI.create_bundle') as mock_create_bundle:
+            with patch('ct600.cli.load_config') as mock_load_config:
+                with patch('ct600.cli.create_submission_request') as mock_create_submission_request:
+                    with patch('ct600.cli.submit_to_hmrc') as mock_submit_to_hmrc:
+                        # Set up mocks
+                        mock_bundle = Mock()
+                        mock_bundle.form_values = {"ct600": {3: "1234567890"}}
+                        mock_bundle.get_return.return_value = Mock()
+                        mock_create_bundle.return_value = mock_bundle
+                        
+                        mock_config = Mock()
+                        mock_load_config.return_value = mock_config
+                        
+                        mock_request = Mock()
+                        mock_create_submission_request.return_value = mock_request
+                        
+                        # Mock asyncio operations
+                        mock_loop = Mock()
+                        
+                        # Create a simple callable that returns a completed future to avoid creating coroutines
+                        def mock_submit_function(*args, **kwargs):
+                            import asyncio
+                            future = asyncio.Future()
+                            future.set_result(None)
+                            return future
+                        
+                        mock_submit_to_hmrc.side_effect = mock_submit_function
+                        
+                        with patch('asyncio.new_event_loop', return_value=mock_loop):
+                            cli.submit_ct_message(mock_args)
+                        
+                        # Verify run_until_complete was called
+                        mock_loop.run_until_complete.assert_called_once()
+                        # Verify submit_to_hmrc was called with correct arguments
+                        mock_submit_to_hmrc.assert_called_once_with(mock_config, mock_request)
     
     def test_data_request_not_implemented(self, cli, mock_args):
         """Test data_request method raises NotImplementedError."""
