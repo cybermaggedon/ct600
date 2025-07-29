@@ -320,20 +320,22 @@ class TestCTMessageMethods:
         mock_request = Mock()
         mock_create_submission_request.return_value = mock_request
         
-        # Mock asyncio operations - submit_to_hmrc is async so we need AsyncMock
+        # Mock asyncio operations
         mock_loop = Mock()
         
-        # Create a proper coroutine mock
-        async def mock_coroutine():
-            return None
+        # Create a Future that represents the completed coroutine
+        import asyncio
+        mock_future = asyncio.Future()
+        mock_future.set_result(None)
         
-        mock_submit_to_hmrc.return_value = mock_coroutine()
+        # Mock submit_to_hmrc to return the future (which run_until_complete can handle)
+        mock_submit_to_hmrc.return_value = mock_future
         
         with patch('asyncio.new_event_loop', return_value=mock_loop):
             cli.submit_ct_message(mock_args)
         
-        # The call should pass the actual coroutine, not the AsyncMock
-        mock_loop.run_until_complete.assert_called_once()
+        # Verify run_until_complete was called with our mock future
+        mock_loop.run_until_complete.assert_called_once_with(mock_future)
     
     def test_data_request_not_implemented(self, cli, mock_args):
         """Test data_request method raises NotImplementedError."""
