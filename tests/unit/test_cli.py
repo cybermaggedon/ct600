@@ -322,7 +322,12 @@ class TestCTMessageMethods:
         
         # Mock asyncio operations - submit_to_hmrc is async so we need AsyncMock
         mock_loop = Mock()
-        mock_submit_to_hmrc.return_value = AsyncMock()()  # Create an actual coroutine
+        
+        # Create a proper coroutine mock
+        async def mock_coroutine():
+            return None
+        
+        mock_submit_to_hmrc.return_value = mock_coroutine()
         
         with patch('asyncio.new_event_loop', return_value=mock_loop):
             cli.submit_ct_message(mock_args)
@@ -419,8 +424,11 @@ class TestCLIRun:
             mock_args.data_request = True
             mock_parse.return_value = mock_args
             
-            with pytest.raises(NotImplementedError):
-                cli.run(["--data-request"])
+            with patch('sys.exit') as mock_exit:
+                with patch('builtins.print'):
+                    cli.run(["--data-request"])
+                
+                mock_exit.assert_called_with(1)
     
     def test_run_ct600_error(self, cli):
         """Test run with CT600Error."""
