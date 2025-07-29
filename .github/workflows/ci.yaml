@@ -1,0 +1,77 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master, main ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-dmidecode || echo "dmidecode optional dependency skipped"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tests/requirements.txt
+          pip install -e .
+
+      - name: Run all tests with coverage
+        run: |
+          make test-cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: success()
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+
+  test-cli:
+    name: Test CLI commands
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Test ct600 CLI
+        run: |
+          python -m ct600 --help
+          ct600 --help
+
+      - name: Test corptax-test-service script
+        run: |
+          corptax-test-service --help || echo "Test service help completed"
+

@@ -8,7 +8,13 @@ import asyncio
 from aiohttp import web
 import json
 import copy
-import xmlschema
+import base64
+import xml.etree.ElementTree as ET
+
+try:
+    import xmlschema
+except ImportError:
+    xmlschema = None
 
 svc_endpoint = "http://localhost:8082/"
 
@@ -20,14 +26,20 @@ hints = {
     "http://www.w3.org/2000/09/xmldsig#": "xmldsig-core-schema.xsd"
 }
 
-# ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-96.xsd"))
+ct_schema = None
+env_schema = None
 
-ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-991.xsd"))
-
-env_schema = xmlschema.XMLSchema("schema/envelope-v2-0-HMRC.xsd",
-                                 base_url=".", locations=hints)
-
-print("Loaded.")
+if xmlschema:
+    try:
+        # ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-96.xsd"))
+        ct_schema = xmlschema.XMLSchema(open("schema/CT-2014-v1-991.xsd"))
+        env_schema = xmlschema.XMLSchema("schema/envelope-v2-0-HMRC.xsd",
+                                         base_url=".", locations=hints)
+        print("Loaded.")
+    except Exception as e:
+        print(f"Warning: Could not load schemas: {e}")
+else:
+    print("Warning: xmlschema not available, schema validation disabled")
 
 class Submission:
     pass
@@ -216,19 +228,25 @@ class Api:
         ct_copy = ET.parse("received/ct.xml")
         tree = ET.parse("received/govtalk.xml")
 
-        try:
-            ct_schema.validate(ct_copy)
-            print("Corporation tax validates against schema.")
-        except Exception as e:
-            print("Corporation tax body is not valid.")
-            print(str(e))
+        if ct_schema:
+            try:
+                ct_schema.validate(ct_copy)
+                print("Corporation tax validates against schema.")
+            except Exception as e:
+                print("Corporation tax body is not valid.")
+                print(str(e))
+        else:
+            print("Schema validation skipped (xmlschema not available)")
 
-        try:
-            env_schema.validate(tree.getroot())
-            print("Envelope validates against schema.")
-        except Exception as e:
-            print("Envelope is not valid.")
-            print(str(e))
+        if env_schema:
+            try:
+                env_schema.validate(tree.getroot())
+                print("Envelope validates against schema.")
+            except Exception as e:
+                print("Envelope is not valid.")
+                print(str(e))
+        else:
+            print("Envelope validation skipped (xmlschema not available)")
 
         resp = GovTalkSubmissionAcknowledgement({
             "class": msg.get("class", ""),
@@ -305,9 +323,12 @@ class Api:
         while True:
             await asyncio.sleep(10)
 
-svc = Api(["localhost:8081", "localhost:8082"])
+def main():
+    svc = Api(["localhost:8081", "localhost:8082"])
 
-loop = asyncio.new_event_loop()
-print("Launching service...")
-loop.run_until_complete(svc.run())
+    loop = asyncio.new_event_loop()
+    print("Launching service...")
+    loop.run_until_complete(svc.run())
 
+if __name__ == "__main__":
+    main()

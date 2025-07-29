@@ -1,0 +1,18 @@
+{
+    "company-type": 0,
+    "declaration-name": "Test Director",
+    "declaration-status": "Director",
+    "username": "testuser",
+    "password": "testpass",
+    "gateway-test": "1",
+    "class": "HMRC-CT-CT600-TIL",
+    "vendor-id": "8205",
+    "software": "ct600",
+    "software-version": "1.0.0",
+    "url": "http://localhost:8083/",
+    "title": "Mr",
+    "first-name": "Test",
+    "second-name": "Director",
+    "email": "test@example.com",
+    "phone": "447000123456"
+}
