@@ -1,0 +1,8 @@
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.10.0
+pytest-cov>=4.0.0
+responses>=0.23.0
+xmlschema>=2.0.0
+lxml>=4.9.0
+aioresponses>=0.7.0
