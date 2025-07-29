@@ -803,7 +803,8 @@ class TestGovTalkIRMarkIntegration:
             "ir-envelope": ir_envelope
         }
         
-        msg = GovTalkMessage(params)
+        # Use GovTalkSubmissionRequest which has the required methods
+        msg = GovTalkSubmissionRequest(params)
         result = msg.get_irmark()
         
         assert result == "COMPUTED_IRMARK"
@@ -902,7 +903,8 @@ class TestGovTalkMessageValidation:
             "class": "HMRC-CT-CT600",
             "ir-envelope": ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
         }
-        msg = GovTalkMessage(params)
+        # Use GovTalkSubmissionRequest which has all the required methods
+        msg = GovTalkSubmissionRequest(params)
         
         # Mock the method calls to avoid complex setup
         with patch.object(msg, 'create_header') as mock_header, \
@@ -953,7 +955,8 @@ class TestGovTalkMessageValidation:
     
     def test_create_header_method(self):
         """Test create_header method."""
-        msg = GovTalkMessage()
+        # Use GovTalkSubmissionRequest which has the required methods
+        msg = GovTalkSubmissionRequest()
         root = ET.Element("root")
         
         with patch.object(msg, 'create_message_details') as mock_md, \
