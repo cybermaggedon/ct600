@@ -1,0 +1,39 @@
+ct600:
+  # Company name
+  1: Test Company Ltd
+
+  # Company registration number
+  2: 12345678
+
+  # Tax reference
+  3: 1234567890
+
+  # Type of company
+  4: 6
+
+  # Start of return
+  30: 2023-01-01
+
+  # End of return
+  35: 2023-12-31
+
+  # Repayments this period
+  40: true
+
+  # Making more than one return now
+  50: 
+
+  # Estimated figures
+  55: 
+
+  # Turnover
+  470: 500000.00
+
+  # Tax payable
+  475: 95000.00
+
+  # Registered office address
+  960:
+  - 123 Test Street
+  - Test City
+  - TE1 2ST

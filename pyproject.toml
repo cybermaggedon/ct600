@@ -30,3 +30,10 @@ Download = "https://github.com/cybermaggedon/ct600/archive/refs/tags/v1.0.0.tar.
 [project.scripts]
 ct600 = "ct600.__main__:main"
 corptax-test-service = "ct600.test_service:main"
+
+[tool.setuptools.packages.find]
+include = ["ct600*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "ct600.__version__"}
+
