@@ -346,16 +346,145 @@ class TestGovTalkSubmissionRequest:
     
     def test_submission_request_xml_generation(self, submission_params):
         """Test XML generation from submission request."""
-        try:
-            req = GovTalkSubmissionRequest(submission_params)
-            xml_output = req.toxml()
-            
-            # Should produce valid XML
-            root = ET.fromstring(xml_output)
-            assert root.tag.endswith("GovTalkMessage")
-            
-        except Exception:
-            pytest.skip("XML generation not implemented or failing")
+        req = GovTalkSubmissionRequest(submission_params)
+        xml_output = req.toxml()
+        
+        # Should produce valid XML
+        root = ET.fromstring(xml_output)
+        assert root.tag.endswith("GovTalkMessage")
+    
+    def test_submission_request_decode_xml(self):
+        """Test decoding XML into submission request."""
+        # Create a minimal XML structure for testing
+        root = ET.Element(f"{{{env_ns}}}GovTalkMessage")
+        header = ET.SubElement(root, f"{{{env_ns}}}Header")
+        md = ET.SubElement(header, f"{{{env_ns}}}MessageDetails")
+        ET.SubElement(md, f"{{{env_ns}}}Class").text = "HMRC-CT-CT600"
+        ET.SubElement(md, f"{{{env_ns}}}Function").text = "submit"
+        ET.SubElement(md, f"{{{env_ns}}}Qualifier").text = "request"
+        ET.SubElement(md, f"{{{env_ns}}}TransactionID").text = "TX123"
+        ET.SubElement(md, f"{{{env_ns}}}GatewayTest").text = "1"
+        
+        sender = ET.SubElement(header, f"{{{env_ns}}}SenderDetails")
+        ET.SubElement(sender, f"{{{env_ns}}}SenderID").text = "testuser"
+        ida = ET.SubElement(sender, f"{{{env_ns}}}IDAuthentication")
+        auth = ET.SubElement(ida, f"{{{env_ns}}}Authentication")
+        ET.SubElement(auth, f"{{{env_ns}}}Value").text = "password"
+        
+        gtd = ET.SubElement(root, f"{{{env_ns}}}GovTalkDetails")
+        keys = ET.SubElement(gtd, f"{{{env_ns}}}Keys")
+        key = ET.SubElement(keys, f"{{{env_ns}}}Key")
+        key.text = "1234567890"
+        
+        cr = ET.SubElement(gtd, f"{{{env_ns}}}ChannelRouting")
+        ch = ET.SubElement(cr, f"{{{env_ns}}}Channel")
+        ET.SubElement(ch, f"{{{env_ns}}}URI").text = "8205"
+        ET.SubElement(ch, f"{{{env_ns}}}Product").text = "ct600"
+        ET.SubElement(ch, f"{{{env_ns}}}Version").text = "1.0.0"
+        
+        body = ET.SubElement(root, f"{{{env_ns}}}Body")
+        ir_envelope = ET.SubElement(body, f"{{{ct_ns}}}IRenvelope")
+        
+        req = GovTalkSubmissionRequest()
+        req.decode_xml(root)
+        
+        # Check that parameters were extracted correctly
+        assert req.params["class"] == "HMRC-CT-CT600"
+        assert req.params["function"] == "submit"
+        assert req.params["qualifier"] == "request"
+        assert req.params["transaction-id"] == "TX123"
+        assert req.params["gateway-test"] == "1"
+        assert req.params["tax-reference"] == "1234567890"
+        assert req.params["vendor-id"] == "8205"
+        assert req.params["software"] == "ct600"
+        assert req.params["software-version"] == "1.0.0"
+        assert req.params["ir-envelope"] is ir_envelope
+    
+    def test_submission_request_create_message_details(self):
+        """Test message details creation for submission request."""
+        params = {
+            "class": "HMRC-CT-CT600",
+            "qualifier": "request", 
+            "function": "submit",
+            "transaction-id": "TX123",
+            "gateway-test": "1"
+        }
+        req = GovTalkSubmissionRequest(params)
+        
+        root = ET.Element("root")
+        req.create_message_details(root)
+        
+        # Check message details structure
+        md = root.find(f"{{{env_ns}}}MessageDetails")
+        assert md is not None
+        assert md.find(f"{{{env_ns}}}Class").text == "HMRC-CT-CT600"
+        assert md.find(f"{{{env_ns}}}Qualifier").text == "request"
+        assert md.find(f"{{{env_ns}}}Function").text == "submit"
+        assert md.find("TransactionID").text == "TX123"
+        assert md.find("GatewayTest").text == "1"
+    
+    def test_submission_request_create_sender_details(self):
+        """Test sender details creation."""
+        params = {
+            "username": "testuser",
+            "password": "testpass",
+            "email": "test@example.com"
+        }
+        req = GovTalkSubmissionRequest(params)
+        
+        root = ET.Element("root")
+        req.create_sender_details(root)
+        
+        # Check sender details structure
+        sd = root.find("SenderDetails")
+        assert sd is not None
+        
+        ids = sd.find("IDAuthentication")
+        assert ids is not None
+        assert ids.find("SenderID").text == "testuser"
+        assert ids.find("EmailAddress").text == "test@example.com"
+        
+        auth = ids.find("Authentication")
+        assert auth is not None
+        assert auth.find("Method").text == "clear"
+        assert auth.find("Role").text == "principal"
+        assert auth.find("Value").text == "testpass"
+    
+    def test_submission_request_create_govtalk_details(self):
+        """Test GovTalk details creation."""
+        params = {
+            "tax-reference": "1234567890",
+            "vendor-id": "8205",
+            "software": "ct600",
+            "software-version": "1.0.0"
+        }
+        req = GovTalkSubmissionRequest(params)
+        
+        root = ET.Element("root")
+        req.create_govtalk_details(root)
+        
+        # Check GovTalk details structure
+        gtd = root.find(f"{{{env_ns}}}GovTalkDetails")
+        assert gtd is not None
+        
+        keys = gtd.find(f"{{{env_ns}}}Keys")
+        assert keys is not None
+        key = keys.find(f"{{{env_ns}}}Key")
+        assert key is not None
+        assert key.text == "1234567890"
+        assert key.get("Type") == "UTR"
+        
+        td = gtd.find("TargetDetails")
+        assert td is not None
+        assert td.find("Organisation").text == "HMRC"
+        
+        cr = gtd.find("ChannelRouting")
+        assert cr is not None
+        ch = cr.find("Channel")
+        assert ch is not None
+        assert ch.find("URI").text == "8205"
+        assert ch.find("Product").text == "ct600"
+        assert ch.find("Version").text == "1.0.0"
 
 
 class TestGovTalkSubmissionAcknowledgement:
@@ -374,12 +503,67 @@ class TestGovTalkSubmissionAcknowledgement:
     
     def test_acknowledgement_creation(self, ack_params):
         """Test creating an acknowledgement."""
-        try:
-            ack = GovTalkSubmissionAcknowledgement(ack_params)
-            assert ack is not None
-            assert ack.params == ack_params
-        except Exception:
-            pytest.skip("GovTalkSubmissionAcknowledgement not implemented")
+        ack = GovTalkSubmissionAcknowledgement(ack_params)
+        assert ack is not None
+        # Check that params were merged with defaults
+        assert ack.params["class"] == "HMRC-CT-CT600"
+        assert ack.params["function"] == "submit"
+        assert ack.params["qualifier"] == "acknowledgement"
+    
+    def test_acknowledgement_decode_xml(self):
+        """Test decoding XML into acknowledgement."""
+        root = ET.Element(f"{{{env_ns}}}GovTalkMessage")
+        header = ET.SubElement(root, f"{{{env_ns}}}Header")
+        md = ET.SubElement(header, f"{{{env_ns}}}MessageDetails")
+        ET.SubElement(md, f"{{{env_ns}}}Class").text = "HMRC-CT-CT600"
+        ET.SubElement(md, f"{{{env_ns}}}Function").text = "submit"
+        ET.SubElement(md, f"{{{env_ns}}}Qualifier").text = "acknowledgement"
+        ET.SubElement(md, f"{{{env_ns}}}TransactionID").text = "TX123"
+        ET.SubElement(md, f"{{{env_ns}}}CorrelationID").text = "CORR456"
+        
+        rep = ET.SubElement(md, f"{{{env_ns}}}ResponseEndPoint")
+        rep.set("PollInterval", "30")
+        rep.text = "http://localhost:8082/"
+        
+        ack = GovTalkSubmissionAcknowledgement()
+        ack.decode_xml(root)
+        
+        assert ack.params["class"] == "HMRC-CT-CT600"
+        assert ack.params["function"] == "submit" 
+        assert ack.params["qualifier"] == "acknowledgement"
+        assert ack.params["transaction-id"] == "TX123"
+        assert ack.params["correlation-id"] == "CORR456"
+        assert ack.params["poll-interval"] == "30"
+        assert ack.params["response-endpoint"] == "http://localhost:8082/"
+    
+    def test_acknowledgement_create_message_details(self):
+        """Test message details creation for acknowledgement."""
+        params = {
+            "class": "HMRC-CT-CT600",
+            "qualifier": "acknowledgement",
+            "function": "submit", 
+            "transaction-id": "TX123",
+            "correlation-id": "CORR456",
+            "poll-interval": "30",
+            "response-endpoint": "http://localhost:8082/"
+        }
+        ack = GovTalkSubmissionAcknowledgement(params)
+        
+        root = ET.Element("root")
+        ack.create_message_details(root)
+        
+        md = root.find(f"{{{env_ns}}}MessageDetails")
+        assert md is not None
+        assert md.find("Class").text == "HMRC-CT-CT600"
+        assert md.find("Qualifier").text == "acknowledgement"
+        assert md.find("Function").text == "submit"
+        assert md.find("TransactionID").text == "TX123"
+        assert md.find("CorrelationID").text == "CORR456"
+        
+        rep = md.find("ResponseEndPoint")
+        assert rep is not None
+        assert rep.get("PollInterval") == "30"
+        assert rep.text == "http://localhost:8082/"
 
 
 class TestGovTalkSubmissionPoll:
@@ -579,6 +763,112 @@ class TestGovTalkIRMarkIntegration:
         
         # Should be able to import and call
         assert callable(irmark_compute)
+    
+    def test_message_with_irmark_parameter(self):
+        """Test message creation with IRmark parameter."""
+        params = {
+            "class": "HMRC-CT-CT600",
+            "irmark": "TEST_IRMARK_VALUE",
+            "ir-envelope": ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        }
+        
+        # Add IRheader with IRmark element to test IRmark insertion
+        ir_envelope = params["ir-envelope"]
+        ir_header = ET.SubElement(ir_envelope, "{http://www.govtalk.gov.uk/taxation/CT/5}IRheader")
+        irmark_elem = ET.SubElement(ir_header, "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        
+        # Use GovTalkSubmissionRequest which has the required methods
+        msg = GovTalkSubmissionRequest(params)
+        tree = msg.create_message()
+        root = tree.getroot()
+        
+        # Check that IRmark was set in the XML
+        irmark_elements = root.findall(".//" + "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        assert len(irmark_elements) > 0
+        assert irmark_elements[0].text == "TEST_IRMARK_VALUE"
+        assert irmark_elements[0].get("Type") == "generic"
+    
+    @patch('ct600.govtalk.irmark_compute')
+    def test_get_irmark_computation(self, mock_irmark):
+        """Test IRmark computation in get_irmark method."""
+        mock_irmark.return_value = "COMPUTED_IRMARK"
+        
+        # Create envelope with IRheader and IRmark elements
+        ir_envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        ir_header = ET.SubElement(ir_envelope, "{http://www.govtalk.gov.uk/taxation/CT/5}IRheader")
+        irmark_elem = ET.SubElement(ir_header, "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        
+        params = {
+            "class": "HMRC-CT-CT600",
+            "ir-envelope": ir_envelope
+        }
+        
+        msg = GovTalkMessage(params)
+        result = msg.get_irmark()
+        
+        assert result == "COMPUTED_IRMARK"
+        mock_irmark.assert_called_once()
+    
+    def test_add_irmark(self):
+        """Test adding IRmark to message parameters."""
+        ir_envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        ir_header = ET.SubElement(ir_envelope, "{http://www.govtalk.gov.uk/taxation/CT/5}IRheader")
+        irmark_elem = ET.SubElement(ir_header, "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        
+        params = {
+            "class": "HMRC-CT-CT600",
+            "ir-envelope": ir_envelope
+        }
+        
+        msg = GovTalkMessage(params)
+        
+        with patch.object(msg, 'get_irmark', return_value="COMPUTED_VALUE"):
+            msg.add_irmark()
+            assert msg.params["irmark"] == "COMPUTED_VALUE"
+    
+    def test_verify_irmark_success(self):
+        """Test successful IRmark verification."""
+        ir_envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        ir_header = ET.SubElement(ir_envelope, "{http://www.govtalk.gov.uk/taxation/CT/5}IRheader")
+        irmark_elem = ET.SubElement(ir_header, "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        
+        params = {
+            "class": "HMRC-CT-CT600",
+            "irmark": "EXPECTED_IRMARK",
+            "ir-envelope": ir_envelope
+        }
+        
+        msg = GovTalkMessage(params)
+        
+        with patch.object(msg, 'get_irmark', return_value="EXPECTED_IRMARK"):
+            # Should not raise an exception
+            msg.verify_irmark()
+    
+    def test_verify_irmark_failure(self):
+        """Test IRmark verification failure."""
+        ir_envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        ir_header = ET.SubElement(ir_envelope, "{http://www.govtalk.gov.uk/taxation/CT/5}IRheader")
+        irmark_elem = ET.SubElement(ir_header, "{http://www.govtalk.gov.uk/taxation/CT/5}IRmark")
+        
+        params = {
+            "class": "HMRC-CT-CT600",
+            "irmark": "EXPECTED_IRMARK",
+            "ir-envelope": ir_envelope
+        }
+        
+        msg = GovTalkMessage(params)
+        
+        with patch.object(msg, 'get_irmark', return_value="DIFFERENT_IRMARK"):
+            with pytest.raises(RuntimeError, match="IRmark is invalid"):
+                msg.verify_irmark()
+    
+    def test_verify_irmark_missing(self):
+        """Test IRmark verification with missing IRmark."""
+        params = {"class": "HMRC-CT-CT600"}
+        msg = GovTalkMessage(params)
+        
+        with pytest.raises(RuntimeError, match="No IRmark"):
+            msg.verify_irmark()
 
 
 class TestGovTalkMessageValidation:
@@ -605,3 +895,76 @@ class TestGovTalkMessageValidation:
         """Test handling of None parameters."""
         msg = GovTalkMessage(None)
         assert msg.params == {}
+    
+    def test_create_message_structure(self):
+        """Test basic XML message structure creation."""
+        params = {
+            "class": "HMRC-CT-CT600",
+            "ir-envelope": ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        }
+        msg = GovTalkMessage(params)
+        
+        # Mock the method calls to avoid complex setup
+        with patch.object(msg, 'create_header') as mock_header, \
+             patch.object(msg, 'create_govtalk_details') as mock_gtd, \
+             patch.object(msg, 'create_body') as mock_body:
+            
+            tree = msg.create_message()
+            root = tree.getroot()
+            
+            # Check basic structure
+            assert root.tag.endswith("GovTalkMessage")
+            assert root.nsmap[None] == env_ns
+            assert root.nsmap.get("ct") == ct_ns
+            
+            # Check envelope version
+            env_version = root.find(f"{{{env_ns}}}EnvelopeVersion")
+            assert env_version is not None
+            assert env_version.text == "2.0"
+            
+            # Verify methods were called
+            mock_header.assert_called_once_with(root)
+            mock_gtd.assert_called_once_with(root)
+            mock_body.assert_called_once_with(root)
+    
+    def test_ir_envelope_method(self):
+        """Test ir_envelope method returns correct envelope."""
+        envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        params = {"ir-envelope": envelope}
+        msg = GovTalkMessage(params)
+        
+        result = msg.ir_envelope()
+        assert result is envelope
+    
+    def test_create_body_method(self):
+        """Test create_body method."""
+        envelope = ET.Element("{http://www.govtalk.gov.uk/taxation/CT/5}IRenvelope")
+        params = {"ir-envelope": envelope}
+        msg = GovTalkMessage(params)
+        
+        root = ET.Element("root")
+        msg.create_body(root)
+        
+        # Check that body was created with ir-envelope
+        body = root.find(f"{{{env_ns}}}Body")
+        assert body is not None
+        assert len(body) == 1
+        assert body[0] is envelope
+    
+    def test_create_header_method(self):
+        """Test create_header method."""
+        msg = GovTalkMessage()
+        root = ET.Element("root")
+        
+        with patch.object(msg, 'create_message_details') as mock_md, \
+             patch.object(msg, 'create_sender_details') as mock_sd:
+            
+            msg.create_header(root)
+            
+            # Check header was created
+            header = root.find(f"{{{env_ns}}}Header")
+            assert header is not None
+            
+            # Verify sub-methods were called
+            mock_md.assert_called_once_with(header)
+            mock_sd.assert_called_once_with(header)
