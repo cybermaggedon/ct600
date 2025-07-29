@@ -1,4 +1,4 @@
-.PHONY: test test-unit test-integration test-e2e test-cov install-dev clean help
+.PHONY: test test-unit test-integration test-e2e test-contract test-cov install-dev clean help
 
 # Default target
 help:
@@ -7,6 +7,7 @@ help:
 	@echo "  test-unit      - Run unit tests only"
 	@echo "  test-integration - Run integration tests only"
 	@echo "  test-e2e       - Run end-to-end tests only"
+	@echo "  test-contract  - Run contract tests only"
 	@echo "  test-cov       - Run tests with coverage report"
 	@echo "  install-dev    - Install package in development mode"
 	@echo "  clean          - Clean build artifacts"
@@ -32,6 +33,10 @@ test-integration:
 # Run end-to-end tests only
 test-e2e:
 	pytest tests/e2e/ -v
+
+# Run contract tests only
+test-contract:
+	pytest tests/contract/ -v
 
 # Run tests with coverage
 test-cov:
