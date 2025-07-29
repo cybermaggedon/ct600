@@ -342,8 +342,9 @@ class TestCLIArgumentValidation:
             "--submit"
         ], capture_output=True, text=True, timeout=10)
         
-        # Should handle gracefully
-        assert result.returncode in [0, 1]
+        # Should handle gracefully - argparse returns 2 for argument errors
+        assert result.returncode == 2
+        assert "not allowed with argument" in result.stderr
     
     def test_attachment_handling(self):
         """Test attachment parameter handling."""
