@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ct600"
+version = "1.0.0"
+authors = [
+    {name = "Cybermaggedon", email = "mark@cyberapocalypse.co.uk"},
+]
+description = "UK HMRC Corporation Tax submission"
+readme = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "aiohttp",
+    "py-dmidecode",
+    "requests",
+    "ixbrl-parse",
+]
+
+[project.urls]
+Homepage = "https://github.com/cybermaggedon/ct600"
+Download = "https://github.com/cybermaggedon/ct600/archive/refs/tags/v1.0.0.tar.gz"
+
+[project.scripts]
+ct600 = "ct600.__main__:main"
+corptax-test-service = "ct600.test_service:main"

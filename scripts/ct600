@@ -1,6 +1,0 @@
-#!/usr/bin/env python3
-
-from ct600.__main__ import main
-
-main()
-
