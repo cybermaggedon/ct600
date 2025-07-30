@@ -187,12 +187,22 @@ class Computations:
         return self.value(val)
 
     def turnover_revenue(self):
-        
-        val = self.period_context().values[
-            ET.QName(CORE_NS, "TurnoverRevenue")
-        ]
+        qname = ET.QName(CORE_NS, "TurnoverRevenue")
 
-        return self.value(val)
+        try:
+            # Try the original approach first
+            val = self.period_context().values[qname]
+            return self.value(val)
+        except KeyError:
+            # Try to find any QName with localname "TurnoverRevenue"
+            context = self.period_context()
+            for available_qname in context.values.keys():
+                if hasattr(available_qname, 'localname') and available_qname.localname == "TurnoverRevenue":
+                    val = context.values[available_qname]
+                    return self.value(val)
+
+            # If still not found, return 0
+            return "0"
 
     def adjusted_trading_profit(self):
         
