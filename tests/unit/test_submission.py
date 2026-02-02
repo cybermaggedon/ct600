@@ -446,5 +446,5 @@ class TestSubmissionIntegration:
         # Test poll params generation
         poll_params = manager.config.get_poll_params("test-correlation")
         assert poll_params["class"] == "CUSTOM-CLASS"
-        assert poll_params["gateway-test"] is False
+        assert poll_params["gateway-test"] == "0"
         assert poll_params["correlation-id"] == "test-correlation"
