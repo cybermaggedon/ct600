@@ -33,16 +33,15 @@ class TestCT600Config:
         config_data = {
             "username": "test_user",
             "password": "test_pass"
-            # Missing gateway-test, vendor-id, url
+            # Missing gateway-test, vendor-id (url is now optional)
         }
-        
+
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config(config_data)
-        
+
         assert "Missing required configuration keys" in str(exc_info.value)
         assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
-        assert "url" in exc_info.value.missing_keys
     
     def test_invalid_gateway_test_type(self):
         """Test initialization with invalid gateway-test type."""
@@ -408,13 +407,12 @@ class TestConfigurationValidation:
         """Test validation with empty configuration."""
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config({})
-        
-        assert len(exc_info.value.missing_keys) == 5  # All required keys missing
+
+        assert len(exc_info.value.missing_keys) == 4  # All required keys missing (url is optional)
         assert "username" in exc_info.value.missing_keys
         assert "password" in exc_info.value.missing_keys
         assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
-        assert "url" in exc_info.value.missing_keys
     
     def test_none_values_in_config(self):
         """Test validation with None values."""
@@ -454,7 +452,7 @@ class TestConfigurationValidation:
             "gateway-test": True,
             "vendor-id": "test_vendor"
         }
-        
+
         # Valid URLs
         valid_urls = [
             "http://example.com",
@@ -462,27 +460,33 @@ class TestConfigurationValidation:
             "http://example.com/path",
             "https://example.com:8080/path?query=value",
         ]
-        
+
         for url in valid_urls:
             config_data = base_config.copy()
             config_data["url"] = url
             config = CT600Config(config_data)  # Should not raise
             assert config.get("url") == url
-        
-        # Invalid URLs
+
+        # Invalid URLs (non-HTTP/HTTPS schemes)
         invalid_urls = [
             "ftp://example.com",
             "example.com",
             "//example.com",
-            "",
-            None
         ]
-        
+
         for url in invalid_urls:
             config_data = base_config.copy()
             config_data["url"] = url
             with pytest.raises(ConfigurationError):
                 CT600Config(config_data)
+
+        # Empty/None URLs are allowed (will use default)
+        for url in ["", None]:
+            config_data = base_config.copy()
+            config_data["url"] = url
+            config = CT600Config(config_data)  # Should not raise
+            # submission_url returns default when url is empty/None
+            assert config.submission_url == "https://transaction-engine.tax.service.gov.uk/submission"
 
 
 class TestConfigurationIntegration:

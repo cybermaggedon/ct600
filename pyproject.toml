@@ -26,7 +26,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/cybermaggedon/ct600"
-Download = "https://github.com/cybermaggedon/ct600/archive/refs/tags/v1.4.0.tar.gz"
+Download = "https://github.com/cybermaggedon/ct600/.0.tar.gz"
 
 [project.scripts]
 ct600 = "ct600.__main__:main"
