@@ -24,7 +24,7 @@ class TestCT600Config:
         config = CT600Config(config_data)
         assert config.get("username") == "test_user"
         assert config.get("password") == "test_pass"
-        assert config.get("gateway-test") is True
+        assert config.get("gateway-test") == "1"
         assert config.get("vendor-id") == "test_vendor"
         assert config.get("url") == "https://example.com/api"
     
@@ -49,15 +49,15 @@ class TestCT600Config:
         config_data = {
             "username": "test_user",
             "password": "test_pass",
-            "gateway-test": "true",  # Should be boolean
+            "gateway-test": "true",  # Invalid - must be 0, 1, "0", "1", true, or false
             "vendor-id": "test_vendor",
             "url": "https://example.com/api"
         }
-        
+
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config(config_data)
-        
-        assert "gateway-test must be a boolean value" in str(exc_info.value)
+
+        assert "gateway-test must be" in str(exc_info.value)
     
     def test_invalid_url_format(self):
         """Test initialization with invalid URL format."""
@@ -113,7 +113,7 @@ class TestCT600Config:
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
         assert params["class"] == "HMRC-CT-CT600"  # Default
-        assert params["gateway-test"] is True
+        assert params["gateway-test"] == "1"
         assert params["tax-reference"] == "1234567890"
         assert params["vendor-id"] == "test_vendor"
         assert params["software"] == "ct600"
@@ -196,7 +196,7 @@ class TestCT600Config:
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
         assert params["class"] == "HMRC-CT-CT600"
-        assert params["gateway-test"] is True
+        assert params["gateway-test"] == "1"
         assert params["correlation-id"] == "correlation-123"
         
         # Should not include other params like vendor-id
@@ -447,7 +447,7 @@ class TestConfigurationIntegration:
         assert request_params["username"] == "test_user"
         assert request_params["password"] == "test_pass"
         assert request_params["class"] == "HMRC-CT-CT600-CUSTOM"
-        assert request_params["gateway-test"] is False
+        assert request_params["gateway-test"] == "0"
         assert request_params["tax-reference"] == "9876543210"
         assert request_params["vendor-id"] == "vendor_123"
         assert request_params["software"] == "ct600"
