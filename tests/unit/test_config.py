@@ -58,7 +58,76 @@ class TestCT600Config:
             CT600Config(config_data)
 
         assert "gateway-test must be" in str(exc_info.value)
-    
+
+    @pytest.mark.parametrize("input_value,expected", [
+        (True, "1"),
+        (False, "0"),
+        (1, "1"),
+        (0, "0"),
+        ("1", "1"),
+        ("0", "0"),
+    ])
+    def test_gateway_test_normalization(self, input_value, expected):
+        """Test gateway-test accepts bool, int, and string formats."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "gateway-test": input_value,
+            "vendor-id": "test_vendor",
+            "url": "https://example.com/api"
+        }
+
+        config = CT600Config(config_data)
+        assert config.get("gateway-test") == expected
+
+    @pytest.mark.parametrize("invalid_value", [
+        "true",
+        "false",
+        "yes",
+        "no",
+        2,
+        -1,
+        None,
+        [],
+        {},
+        0.5,
+    ])
+    def test_gateway_test_invalid_values(self, invalid_value):
+        """Test gateway-test rejects invalid values."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "gateway-test": invalid_value,
+            "vendor-id": "test_vendor",
+            "url": "https://example.com/api"
+        }
+
+        with pytest.raises(ConfigurationError) as exc_info:
+            CT600Config(config_data)
+
+        assert "gateway-test must be" in str(exc_info.value)
+
+    @pytest.mark.parametrize("input_value,expected_is_test", [
+        (True, True),
+        (False, False),
+        (1, True),
+        (0, False),
+        ("1", True),
+        ("0", False),
+    ])
+    def test_is_test_gateway_with_all_formats(self, input_value, expected_is_test):
+        """Test is_test_gateway property works with all accepted formats."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "gateway-test": input_value,
+            "vendor-id": "test_vendor",
+            "url": "https://example.com/api"
+        }
+
+        config = CT600Config(config_data)
+        assert config.is_test_gateway is expected_is_test
+
     def test_invalid_url_format(self):
         """Test initialization with invalid URL format."""
         config_data = {
