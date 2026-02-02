@@ -42,9 +42,17 @@ class CT600Config:
                 missing_keys=list(missing_keys)
             )
         
-        # Validate gateway-test is boolean
-        if not isinstance(config_data.get("gateway-test"), bool):
-            raise ConfigurationError("gateway-test must be a boolean value")
+        # Normalize gateway-test to string "0" or "1" for XML compatibility
+        # Accept: bool (true/false), int (0/1), string ("0"/"1")
+        gateway_test = config_data.get("gateway-test")
+        if isinstance(gateway_test, bool):
+            config_data["gateway-test"] = "1" if gateway_test else "0"
+        elif gateway_test in (0, 1):
+            config_data["gateway-test"] = str(gateway_test)
+        elif gateway_test not in ("0", "1"):
+            raise ConfigurationError(
+                "gateway-test must be 0, 1, '0', '1', true, or false"
+            )
         
         # Validate URL format
         url = config_data.get("url")
@@ -116,7 +124,7 @@ class CT600Config:
     @property
     def is_test_gateway(self) -> bool:
         """Check if using test gateway."""
-        return self.get("gateway-test", False)
+        return self.get("gateway-test", "0") == "1"
     
     @property
     def submission_url(self) -> str:
