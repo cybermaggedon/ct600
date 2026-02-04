@@ -529,9 +529,9 @@ class TestCorptaxIntegration:
         """Test that namespace mapping is correctly defined."""
         from ct600.corptax import nsmap, ct_ns
         
-        assert "http://www.hmrc.gov.uk/schemas/ct/comp/2023-01-01" in nsmap
-        assert "http://xbrl.frc.org.uk/dpl/2023-01-01" in nsmap
-        assert "http://xbrl.frc.org.uk/fr/2023-01-01/core" in nsmap
+        assert "http://www.hmrc.gov.uk/schemas/ct/comp/2024-01-01" in nsmap
+        assert "http://xbrl.frc.org.uk/dpl/2025-01-01" in nsmap
+        assert "http://xbrl.frc.org.uk/fr/2025-01-01/core" in nsmap
         assert ct_ns == "http://www.govtalk.gov.uk/taxation/CT/5"
     
     def test_tree_building_recursion(self):
