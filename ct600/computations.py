@@ -5,8 +5,8 @@ import ixbrl_parse.ixbrl
 from ixbrl_parse.ixbrl import Period, Instant, Entity, Dimension
 from ixbrl_parse.value import *
 
-CT_NS = "http://www.hmrc.gov.uk/schemas/ct/comp/2023-01-01"
-CORE_NS = "http://xbrl.frc.org.uk/fr/2023-01-01/core"
+CT_NS = "http://www.hmrc.gov.uk/schemas/ct/comp/2024-01-01"
+CORE_NS = "http://xbrl.frc.org.uk/fr/2025-01-01/core"
 
 class Definition:
     def __init__(self, box, description):
