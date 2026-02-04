@@ -634,8 +634,8 @@ class TestComputationsConstants:
         """Test that namespace constants are correctly defined."""
         from ct600.computations import CT_NS, CORE_NS
         
-        assert CT_NS == "http://www.hmrc.gov.uk/schemas/ct/comp/2023-01-01"
-        assert CORE_NS == "http://xbrl.frc.org.uk/fr/2023-01-01/core"
+        assert CT_NS == "http://www.hmrc.gov.uk/schemas/ct/comp/2024-01-01"
+        assert CORE_NS == "http://xbrl.frc.org.uk/fr/2025-01-01/core"
 
 
 class TestComputationsIntegration:
@@ -644,10 +644,10 @@ class TestComputationsIntegration:
     def test_qname_creation(self):
         """Test QName creation with namespaces."""
         qname1 = ET.QName(CT_NS, "CompanyName")
-        assert str(qname1) == "{http://www.hmrc.gov.uk/schemas/ct/comp/2023-01-01}CompanyName"
-        
+        assert str(qname1) == "{http://www.hmrc.gov.uk/schemas/ct/comp/2024-01-01}CompanyName"
+
         qname2 = ET.QName(CORE_NS, "TurnoverRevenue")
-        assert str(qname2) == "{http://xbrl.frc.org.uk/fr/2023-01-01/core}TurnoverRevenue"
+        assert str(qname2) == "{http://xbrl.frc.org.uk/fr/2025-01-01/core}TurnoverRevenue"
     
     def test_dimension_creation(self):
         """Test Dimension object creation."""
