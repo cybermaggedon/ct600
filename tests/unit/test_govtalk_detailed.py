@@ -420,8 +420,8 @@ class TestGovTalkSubmissionRequest:
         assert md.find(f"{{{env_ns}}}Class").text == "HMRC-CT-CT600"
         assert md.find(f"{{{env_ns}}}Qualifier").text == "request"
         assert md.find(f"{{{env_ns}}}Function").text == "submit"
-        assert md.find("TransactionID").text == "TX123"
-        assert md.find("GatewayTest").text == "1"
+        assert md.find(f"{{{env_ns}}}TransactionID").text == "TX123"
+        assert md.find(f"{{{env_ns}}}GatewayTest").text == "1"
     
     def test_submission_request_create_sender_details(self):
         """Test sender details creation."""
@@ -436,19 +436,19 @@ class TestGovTalkSubmissionRequest:
         req.create_sender_details(root)
         
         # Check sender details structure
-        sd = root.find("SenderDetails")
+        sd = root.find(f"{{{env_ns}}}SenderDetails")
         assert sd is not None
-        
-        ids = sd.find("IDAuthentication")
+
+        ids = sd.find(f"{{{env_ns}}}IDAuthentication")
         assert ids is not None
-        assert ids.find("SenderID").text == "testuser"
-        assert ids.find("EmailAddress").text == "test@example.com"
-        
-        auth = ids.find("Authentication")
+        assert ids.find(f"{{{env_ns}}}SenderID").text == "testuser"
+        assert ids.find(f"{{{env_ns}}}EmailAddress").text == "test@example.com"
+
+        auth = ids.find(f"{{{env_ns}}}Authentication")
         assert auth is not None
-        assert auth.find("Method").text == "clear"
-        assert auth.find("Role").text == "principal"
-        assert auth.find("Value").text == "testpass"
+        assert auth.find(f"{{{env_ns}}}Method").text == "clear"
+        assert auth.find(f"{{{env_ns}}}Role").text == "principal"
+        assert auth.find(f"{{{env_ns}}}Value").text == "testpass"
     
     def test_submission_request_create_govtalk_details(self):
         """Test GovTalk details creation."""
@@ -474,17 +474,17 @@ class TestGovTalkSubmissionRequest:
         assert key.text == "1234567890"
         assert key.get("Type") == "UTR"
         
-        td = gtd.find("TargetDetails")
+        td = gtd.find(f"{{{env_ns}}}TargetDetails")
         assert td is not None
-        assert td.find("Organisation").text == "HMRC"
-        
-        cr = gtd.find("ChannelRouting")
+        assert td.find(f"{{{env_ns}}}Organisation").text == "HMRC"
+
+        cr = gtd.find(f"{{{env_ns}}}ChannelRouting")
         assert cr is not None
-        ch = cr.find("Channel")
+        ch = cr.find(f"{{{env_ns}}}Channel")
         assert ch is not None
-        assert ch.find("URI").text == "8205"
-        assert ch.find("Product").text == "ct600"
-        assert ch.find("Version").text == "1.0.0"
+        assert ch.find(f"{{{env_ns}}}URI").text == "8205"
+        assert ch.find(f"{{{env_ns}}}Product").text == "ct600"
+        assert ch.find(f"{{{env_ns}}}Version").text == "1.0.0"
 
 
 class TestGovTalkSubmissionAcknowledgement:
@@ -554,13 +554,13 @@ class TestGovTalkSubmissionAcknowledgement:
         
         md = root.find(f"{{{env_ns}}}MessageDetails")
         assert md is not None
-        assert md.find("Class").text == "HMRC-CT-CT600"
-        assert md.find("Qualifier").text == "acknowledgement"
-        assert md.find("Function").text == "submit"
-        assert md.find("TransactionID").text == "TX123"
-        assert md.find("CorrelationID").text == "CORR456"
-        
-        rep = md.find("ResponseEndPoint")
+        assert md.find(f"{{{env_ns}}}Class").text == "HMRC-CT-CT600"
+        assert md.find(f"{{{env_ns}}}Qualifier").text == "acknowledgement"
+        assert md.find(f"{{{env_ns}}}Function").text == "submit"
+        assert md.find(f"{{{env_ns}}}TransactionID").text == "TX123"
+        assert md.find(f"{{{env_ns}}}CorrelationID").text == "CORR456"
+
+        rep = md.find(f"{{{env_ns}}}ResponseEndPoint")
         assert rep is not None
         assert rep.get("PollInterval") == "30"
         assert rep.text == "http://localhost:8082/"
