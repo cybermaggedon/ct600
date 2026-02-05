@@ -7,7 +7,7 @@
     "gateway-test": "0",
     "class": "HMRC-CT-CT600",
     "vendor-id": "8205",
-"url": "https://transaction-engine.tax.service.gov.uk/submission",
+    "url": "https://transaction-engine.tax.service.gov.uk/submission",
     "title": "Mr",
     "first-name": "Fred",
     "second-name": "Bloggs",
