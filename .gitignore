@@ -15,5 +15,7 @@ htmlcov/
 coverage.xml
 *.cover
 
+config.json
+
 *~
 

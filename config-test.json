@@ -5,6 +5,7 @@
     "username": "CTUser100",
     "password": "password",
     "gateway-test": "1",
+    "class": "HMRC-CT-CT600-TIL",
     "vendor-id": "1234",
     "software": "ct600",
     "software-version": "1.0.0",

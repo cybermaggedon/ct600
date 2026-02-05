@@ -1,0 +1,18 @@
+{
+    "company-type": 0,
+    "declaration-name": "Fred Bloggs",
+    "declaration-status": "Director",
+    "username": "govidgoeshere",
+    "password": "passwordgoeshere",
+    "gateway-test": "0",
+    "class": "HMRC-CT-CT600",
+    "vendor-id": "8205",
+    "software": "ct600",
+    "software-version": "1.0.0",
+    "url": "https://transaction-engine.tax.service.gov.uk/submission",
+    "title": "Mr",
+    "first-name": "Fred",
+    "second-name": "Bloggs",
+    "email": "fred@example.com",
+    "phone": "447000123456"
+}

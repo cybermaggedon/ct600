@@ -7,9 +7,10 @@ VERSION = "1.0.0"
 DEFAULT_CONFIG_FILE = "config.json"
 
 # HMRC-specific constants
-HMRC_MESSAGE_CLASS = "HMRC-CT-CT600"
+HMRC_MESSAGE_CLASS = "HMRC-CT-CT600-TIL"
 SOFTWARE_NAME = "ct600"
-DEFAULT_SUBMISSION_URL = "https://transaction-engine.tax.service.gov.uk/submission"
+DEFAULT_SUBMISSION_URL = "http://localhost:8081/"
+DEFAULT_GATEWAY_TEST = "1"
 
 # Timeout settings
 SUBMISSION_TIMEOUT_SECONDS = 120

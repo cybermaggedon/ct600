@@ -3,7 +3,7 @@
 import datetime
 from typing import Dict, Any, Optional
 
-from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, VERSION, DEFAULT_SUBMISSION_URL
+from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, VERSION, DEFAULT_SUBMISSION_URL, DEFAULT_GATEWAY_TEST
 from .exceptions import ConfigurationError
 
 
@@ -11,7 +11,7 @@ class CT600Config:
     """Configuration container for CT600 operations."""
     
     REQUIRED_KEYS = {
-        "username", "password", "gateway-test", "vendor-id"
+        "username", "password", "vendor-id"
     }
     
     def __init__(self, config_data: Dict[str, Any]):
@@ -42,6 +42,10 @@ class CT600Config:
                 missing_keys=list(missing_keys)
             )
         
+        # Apply safe default for gateway-test if not provided
+        if "gateway-test" not in config_data:
+            config_data["gateway-test"] = DEFAULT_GATEWAY_TEST
+
         # Normalize gateway-test to string "0" or "1" for XML compatibility
         # Accept: bool (true/false), int (0/1), string ("0"/"1")
         gateway_test = config_data.get("gateway-test")

@@ -24,7 +24,7 @@ class TestConstants:
     def test_config_constants(self):
         """Test configuration-related constants."""
         assert DEFAULT_CONFIG_FILE == "config.json"
-        assert HMRC_MESSAGE_CLASS == "HMRC-CT-CT600"
+        assert HMRC_MESSAGE_CLASS == "HMRC-CT-CT600-TIL"
         assert SOFTWARE_NAME == "ct600"
     
     def test_timeout_constants(self):

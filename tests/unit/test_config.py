@@ -33,14 +33,13 @@ class TestCT600Config:
         config_data = {
             "username": "test_user",
             "password": "test_pass"
-            # Missing gateway-test, vendor-id (url is now optional)
+            # Missing vendor-id (url and gateway-test are optional)
         }
 
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config(config_data)
 
         assert "Missing required configuration keys" in str(exc_info.value)
-        assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
     
     def test_invalid_gateway_test_type(self):
@@ -180,7 +179,7 @@ class TestCT600Config:
         
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
-        assert params["class"] == "HMRC-CT-CT600"  # Default
+        assert params["class"] == "HMRC-CT-CT600-TIL"  # Default
         assert params["gateway-test"] == "1"
         assert params["tax-reference"] == "1234567890"
         assert params["vendor-id"] == "test_vendor"
@@ -263,7 +262,7 @@ class TestCT600Config:
         
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
-        assert params["class"] == "HMRC-CT-CT600"
+        assert params["class"] == "HMRC-CT-CT600-TIL"
         assert params["gateway-test"] == "1"
         assert params["correlation-id"] == "correlation-123"
         
@@ -408,10 +407,9 @@ class TestConfigurationValidation:
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config({})
 
-        assert len(exc_info.value.missing_keys) == 4  # All required keys missing (url is optional)
+        assert len(exc_info.value.missing_keys) == 3  # All required keys missing (url and gateway-test are optional)
         assert "username" in exc_info.value.missing_keys
         assert "password" in exc_info.value.missing_keys
-        assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
     
     def test_none_values_in_config(self):
@@ -486,7 +484,32 @@ class TestConfigurationValidation:
             config_data["url"] = url
             config = CT600Config(config_data)  # Should not raise
             # submission_url returns default when url is empty/None
-            assert config.submission_url == "https://transaction-engine.tax.service.gov.uk/submission"
+            assert config.submission_url == "http://localhost:8081/"
+
+
+    def test_gateway_test_defaults_when_missing(self):
+        """Test that gateway-test defaults to '1' when not provided."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "vendor-id": "test_vendor",
+            "url": "https://example.com/api"
+        }
+
+        config = CT600Config(config_data)
+        assert config.get("gateway-test") == "1"
+        assert config.is_test_gateway is True
+
+    def test_default_submission_url_when_no_url(self):
+        """Test that submission_url defaults to localhost when no URL provided."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "vendor-id": "test_vendor",
+        }
+
+        config = CT600Config(config_data)
+        assert config.submission_url == "http://localhost:8081/"
 
 
 class TestConfigurationIntegration:
