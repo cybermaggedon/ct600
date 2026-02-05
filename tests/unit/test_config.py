@@ -4,6 +4,7 @@ import pytest
 import datetime
 from unittest.mock import patch, Mock
 
+from ct600 import __version__
 from ct600.config import CT600Config, load_config
 from ct600.exceptions import ConfigurationError
 
@@ -184,7 +185,7 @@ class TestCT600Config:
         assert params["tax-reference"] == "1234567890"
         assert params["vendor-id"] == "test_vendor"
         assert params["software"] == "ct600"
-        assert params["software-version"] == "1.0.0"
+        assert params["software-version"] == __version__
         assert params["ir-envelope"] is mock_envelope
         assert "timestamp" not in params
     
@@ -547,7 +548,7 @@ class TestConfigurationIntegration:
         assert request_params["tax-reference"] == "9876543210"
         assert request_params["vendor-id"] == "vendor_123"
         assert request_params["software"] == "ct600"
-        assert request_params["software-version"] == "1.0.0"
+        assert request_params["software-version"] == __version__
         assert request_params["ir-envelope"] is mock_envelope
         assert isinstance(request_params["timestamp"], datetime.datetime)
         

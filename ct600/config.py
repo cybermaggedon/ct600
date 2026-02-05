@@ -3,7 +3,8 @@
 import datetime
 from typing import Dict, Any, Optional
 
-from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, VERSION, DEFAULT_SUBMISSION_URL, DEFAULT_GATEWAY_TEST
+from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, DEFAULT_SUBMISSION_URL, DEFAULT_GATEWAY_TEST
+from . import __version__ as VERSION
 from .exceptions import ConfigurationError
 
 
