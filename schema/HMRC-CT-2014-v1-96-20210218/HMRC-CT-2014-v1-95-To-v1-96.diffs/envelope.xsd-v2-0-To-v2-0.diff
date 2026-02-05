@@ -1,0 +1,13 @@
+@@
+     <xsd:documentation>This schema is used as the envelope for all GovTalk messages.  It is described in detail in a separate document on the GovTalk web site.</xsd:documentation>
+     <xsd:appinfo>
+       <gt:KeyWords xmlns:gt='http://www.govtalk.gov.uk/CM/core'>GovTalk, header, envelope</gt:KeyWords>
+       <gms:Metadata xmlns:gms='http://www.govtalk.gov.uk/CM/gms-xs'>
+         <gms:Date>
+-          <gms:Modified>2020-09-16</gms:Modified>
++          <gms:Modified>2021-02-18</gms:Modified>
+         </gms:Date>
+         <gms:Relation>
+           <gms:Requires>xmldsig-core-schema.xsd</gms:Requires>
+         </gms:Relation>
+         <gms:Relation>

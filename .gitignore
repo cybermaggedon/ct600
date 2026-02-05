@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+build/
 *.py[cod]
 *$py.class
 *.so
@@ -14,6 +15,8 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
+
+config.json
 
 *~
 

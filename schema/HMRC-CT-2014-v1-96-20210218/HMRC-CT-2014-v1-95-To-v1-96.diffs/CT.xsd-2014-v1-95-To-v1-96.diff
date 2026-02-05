@@ -1,0 +1,74 @@
+@@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+-<xsd:schema version='1.95' elementFormDefault='qualified' attributeFormDefault='unqualified' id='CT' targetNamespace='http://www.govtalk.gov.uk/taxation/CT/5' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:ct='http://www.govtalk.gov.uk/taxation/CT/5'>
++<xsd:schema version='1.96' elementFormDefault='qualified' attributeFormDefault='unqualified' id='CT' targetNamespace='http://www.govtalk.gov.uk/taxation/CT/5' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:ct='http://www.govtalk.gov.uk/taxation/CT/5'>
+   <xsd:annotation>
+     <xsd:documentation>HMRC FBI Corporation Tax Return</xsd:documentation>
+     <xsd:appinfo>
+       <gt:KeyWords xmlns:gt='http://www.govtalk.gov.uk/CM/core'>taxation, Corporation, FBI, File By Internet, HMRC, CT600, CT600A, CT600B, CT600C, CT600D, CT600E, CT600F, CT600G, CT600H, CT600I, CT600J, CT600K, CT600L</gt:KeyWords>
+       <gms:Metadata xmlns:gms='http://www.govtalk.gov.uk/CM/gms-xs'>
+@@
+         <gms:Creator>HMRC</gms:Creator>
+         <gms:Date>
+           <gms:Created>2014-07-15</gms:Created>
+         </gms:Date>
+         <gms:Date>
+-          <gms:Modified>2020-09-16</gms:Modified>
++          <gms:Modified>2021-02-18</gms:Modified>
+         </gms:Date>
+         <gms:Identifier>{http://www.govtalk.gov.uk/taxation/CT/5}CT</gms:Identifier>
+         <gms:Language>[ISO 639-2/B] ENG</gms:Language>
+         <gms:Publisher>HMRC</gms:Publisher>
+         <gms:Relation>
+@@
+         </gms:Relation>
+         <gms:Relation>
+           <gms:ProvidesDefinitionOf>AttachmentStructure</gms:ProvidesDefinitionOf>
+         </gms:Relation>
+         <gms:Relation>
+-          <gms:ProvidesDefinitionOf>CompanyReference</gms:ProvidesDefinitionOf>
+-        </gms:Relation>
+-        <gms:Relation>
+           <gms:ProvidesDefinitionOf>PeriodType</gms:ProvidesDefinitionOf>
+         </gms:Relation>
+         <gms:Relation>
+           <gms:ProvidesDefinitionOf>IRnonNegativeWholeUnitsMonetaryStructure</gms:ProvidesDefinitionOf>
+         </gms:Relation>
+@@
+         </gms:Relation>
+         <gms:Relation>
+           <gms:ProvidesDefinitionOf>CT_YesType</gms:ProvidesDefinitionOf>
+         </gms:Relation>
+         <gms:Rights>
+-          <gms:Copyright>(C) Crown Copyright 2001-2020</gms:Copyright>
++          <gms:Copyright>(C) Crown Copyright 2001-2021</gms:Copyright>
+         </gms:Rights>
+         <gms:Subject>
+           <gms:Category>Economics and Finance - Tax</gms:Category>
+         </gms:Subject>
+         <gms:Subject>
+@@
+         <xsd:attribute name='Size' type='xsd:integer' use='optional'></xsd:attribute>
+         <xsd:attribute name='Description' type='ct:CTexcludedCharsStringType' use='optional'></xsd:attribute>
+       </xsd:extension>
+     </xsd:simpleContent>
+   </xsd:complexType>
+-  <xsd:complexType name='CompanyReference'>
+-    <xsd:sequence>
+-      <xsd:element name='DistrictNumber' minOccurs='1' maxOccurs='1'>
+-        <xsd:simpleType>
+-          <xsd:restriction base='xsd:string'>
+-            <xsd:length value='3'></xsd:length>
+-            <xsd:pattern value='[0-9]{3}'></xsd:pattern>
+-          </xsd:restriction>
+-        </xsd:simpleType>
+-      </xsd:element>
+-      <xsd:element name='UTR' type='ct:CT_UTRtype' minOccurs='1' maxOccurs='1'></xsd:element>
+-    </xsd:sequence>
+-  </xsd:complexType>
+   <xsd:complexType name='PeriodType'>
+     <xsd:sequence>
+       <xsd:element name='From' type='xsd:date' minOccurs='1' maxOccurs='1'></xsd:element>
+       <xsd:element name='To' type='xsd:date' minOccurs='1' maxOccurs='1'></xsd:element>
+     </xsd:sequence>

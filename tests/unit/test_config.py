@@ -4,6 +4,7 @@ import pytest
 import datetime
 from unittest.mock import patch, Mock
 
+from ct600 import __version__
 from ct600.config import CT600Config, load_config
 from ct600.exceptions import ConfigurationError
 
@@ -33,16 +34,14 @@ class TestCT600Config:
         config_data = {
             "username": "test_user",
             "password": "test_pass"
-            # Missing gateway-test, vendor-id, url
+            # Missing vendor-id (url and gateway-test are optional)
         }
-        
+
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config(config_data)
-        
+
         assert "Missing required configuration keys" in str(exc_info.value)
-        assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
-        assert "url" in exc_info.value.missing_keys
     
     def test_invalid_gateway_test_type(self):
         """Test initialization with invalid gateway-test type."""
@@ -181,12 +180,12 @@ class TestCT600Config:
         
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
-        assert params["class"] == "HMRC-CT-CT600"  # Default
+        assert params["class"] == "HMRC-CT-CT600-TIL"  # Default
         assert params["gateway-test"] == "1"
         assert params["tax-reference"] == "1234567890"
         assert params["vendor-id"] == "test_vendor"
         assert params["software"] == "ct600"
-        assert params["software-version"] == "1.0.0"
+        assert params["software-version"] == __version__
         assert params["ir-envelope"] is mock_envelope
         assert "timestamp" not in params
     
@@ -264,7 +263,7 @@ class TestCT600Config:
         
         assert params["username"] == "test_user"
         assert params["password"] == "test_pass"
-        assert params["class"] == "HMRC-CT-CT600"
+        assert params["class"] == "HMRC-CT-CT600-TIL"
         assert params["gateway-test"] == "1"
         assert params["correlation-id"] == "correlation-123"
         
@@ -408,13 +407,11 @@ class TestConfigurationValidation:
         """Test validation with empty configuration."""
         with pytest.raises(ConfigurationError) as exc_info:
             CT600Config({})
-        
-        assert len(exc_info.value.missing_keys) == 5  # All required keys missing
+
+        assert len(exc_info.value.missing_keys) == 3  # All required keys missing (url and gateway-test are optional)
         assert "username" in exc_info.value.missing_keys
         assert "password" in exc_info.value.missing_keys
-        assert "gateway-test" in exc_info.value.missing_keys
         assert "vendor-id" in exc_info.value.missing_keys
-        assert "url" in exc_info.value.missing_keys
     
     def test_none_values_in_config(self):
         """Test validation with None values."""
@@ -454,7 +451,7 @@ class TestConfigurationValidation:
             "gateway-test": True,
             "vendor-id": "test_vendor"
         }
-        
+
         # Valid URLs
         valid_urls = [
             "http://example.com",
@@ -462,27 +459,58 @@ class TestConfigurationValidation:
             "http://example.com/path",
             "https://example.com:8080/path?query=value",
         ]
-        
+
         for url in valid_urls:
             config_data = base_config.copy()
             config_data["url"] = url
             config = CT600Config(config_data)  # Should not raise
             assert config.get("url") == url
-        
-        # Invalid URLs
+
+        # Invalid URLs (non-HTTP/HTTPS schemes)
         invalid_urls = [
             "ftp://example.com",
             "example.com",
             "//example.com",
-            "",
-            None
         ]
-        
+
         for url in invalid_urls:
             config_data = base_config.copy()
             config_data["url"] = url
             with pytest.raises(ConfigurationError):
                 CT600Config(config_data)
+
+        # Empty/None URLs are allowed (will use default)
+        for url in ["", None]:
+            config_data = base_config.copy()
+            config_data["url"] = url
+            config = CT600Config(config_data)  # Should not raise
+            # submission_url returns default when url is empty/None
+            assert config.submission_url == "http://localhost:8081/"
+
+
+    def test_gateway_test_defaults_when_missing(self):
+        """Test that gateway-test defaults to '1' when not provided."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "vendor-id": "test_vendor",
+            "url": "https://example.com/api"
+        }
+
+        config = CT600Config(config_data)
+        assert config.get("gateway-test") == "1"
+        assert config.is_test_gateway is True
+
+    def test_default_submission_url_when_no_url(self):
+        """Test that submission_url defaults to localhost when no URL provided."""
+        config_data = {
+            "username": "test_user",
+            "password": "test_pass",
+            "vendor-id": "test_vendor",
+        }
+
+        config = CT600Config(config_data)
+        assert config.submission_url == "http://localhost:8081/"
 
 
 class TestConfigurationIntegration:
@@ -520,7 +548,7 @@ class TestConfigurationIntegration:
         assert request_params["tax-reference"] == "9876543210"
         assert request_params["vendor-id"] == "vendor_123"
         assert request_params["software"] == "ct600"
-        assert request_params["software-version"] == "1.0.0"
+        assert request_params["software-version"] == __version__
         assert request_params["ir-envelope"] is mock_envelope
         assert isinstance(request_params["timestamp"], datetime.datetime)
         

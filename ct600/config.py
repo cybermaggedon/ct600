@@ -3,7 +3,8 @@
 import datetime
 from typing import Dict, Any, Optional
 
-from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, VERSION
+from .constants import DEFAULT_CONFIG_FILE, HMRC_MESSAGE_CLASS, SOFTWARE_NAME, DEFAULT_SUBMISSION_URL, DEFAULT_GATEWAY_TEST
+from . import __version__ as VERSION
 from .exceptions import ConfigurationError
 
 
@@ -11,7 +12,7 @@ class CT600Config:
     """Configuration container for CT600 operations."""
     
     REQUIRED_KEYS = {
-        "username", "password", "gateway-test", "vendor-id", "url"
+        "username", "password", "vendor-id"
     }
     
     def __init__(self, config_data: Dict[str, Any]):
@@ -42,6 +43,10 @@ class CT600Config:
                 missing_keys=list(missing_keys)
             )
         
+        # Apply safe default for gateway-test if not provided
+        if "gateway-test" not in config_data:
+            config_data["gateway-test"] = DEFAULT_GATEWAY_TEST
+
         # Normalize gateway-test to string "0" or "1" for XML compatibility
         # Accept: bool (true/false), int (0/1), string ("0"/"1")
         gateway_test = config_data.get("gateway-test")
@@ -54,9 +59,9 @@ class CT600Config:
                 "gateway-test must be 0, 1, '0', '1', true, or false"
             )
         
-        # Validate URL format
+        # Validate URL format if provided
         url = config_data.get("url")
-        if not url or not str(url).startswith(("http://", "https://")):
+        if url and not str(url).startswith(("http://", "https://")):
             raise ConfigurationError("url must be a valid HTTP/HTTPS URL")
     
     def get(self, key: str, default: Any = None) -> Any:
@@ -124,12 +129,12 @@ class CT600Config:
     @property
     def is_test_gateway(self) -> bool:
         """Check if using test gateway."""
-        return self.get("gateway-test", "0") == "1"
+        return self.get("gateway-test") == "1"
     
     @property
     def submission_url(self) -> str:
         """Get the submission URL."""
-        return self.get("url")
+        return self.get("url") or DEFAULT_SUBMISSION_URL
 
 
 def load_config(config_file: Optional[str] = None) -> CT600Config:

@@ -3,7 +3,7 @@
 
 ## Introduction
 
-A utility for managing UK Coroporation Tax submission.  
+A utility for managing UK Corporation Tax submission.
 
 ## Caveat
 
@@ -74,15 +74,157 @@ all the boxes you want to fill in.
 
 See [CT600](https://www.gov.uk/government/publications/corporation-tax-company-tax-return-ct600-2015-version-3)
 
-### Submission
+## Configuration
 
-You need to modify the `config.json` file in line with submission details.
-This will contain your submission credentials.
+Configuration is a JSON file passed via `--config`.  Three config files are
+provided for different scenarios:
 
-The submission command is of the form:
+| File | Purpose | `gateway-test` | `class` | `url` |
+|---|---|---|---|---|
+| `config-test.json` | Local testing | `"1"` | `HMRC-CT-CT600-TIL` | `http://localhost:8081/` |
+| `config-til.json` | Test-In-Live (real HMRC, test data) | `"0"` | `HMRC-CT-CT600-TIL` | HMRC production |
+| `config-prod.json` | Production (real submission) | `"0"` | `HMRC-CT-CT600` | HMRC production |
+
+All three contain placeholder credentials — replace `username`, `password`
+and `vendor-id` with your own before use.
+
+> **Warning:** `config-prod.json` submits real tax returns. Do not use it
+> unless you intend to file.
+
+You can also create your own `config.json` — it is gitignored and will not
+be committed.
+
+### Safe defaults
+
+If a config file omits these fields, the defaults are safe:
+
+| Field | Default |
+|---|---|
+| `url` | `http://localhost:8081/` |
+| `class` | `HMRC-CT-CT600-TIL` |
+| `gateway-test` | `"1"` |
+
+Running with an incomplete config will never accidentally hit production HMRC.
+
+### Config file fields
+
+```json
+{
+    "company-type": 6,
+    "declaration-name": "Sarah McAcre",
+    "declaration-status": "Director",
+    "username": "govidgoeshere",
+    "password": "passwordgoeshere",
+    "gateway-test": "1",
+    "class": "HMRC-CT-CT600-TIL",
+    "vendor-id": "1234",
+    "url": "http://localhost:8081/",
+    "title": "Ms",
+    "first-name": "Sarah",
+    "second-name": "McAcre",
+    "email": "sarah@example.org",
+    "phone": "447900123456"
+}
+```
+
+## Submission
+
+There are three ways to test and submit, in order of risk.
+
+### 1. Local test service (recommended first step)
+
+This is optional and slightly involved to set up, but it is the recommended
+way to get a feel for how the whole submission process works without touching
+HMRC at all.
+
+The package includes a basic corptax emulator with schema validation.
+Install the package, then run:
+
+```
+corptax-test-service
+```
+
+In a separate terminal, submit to it using `config-test.json`:
+
 ```
 ct600 \
-    --config config.json \
+    --config config-test.json \
+    --accounts accts.html \
+    --computations ct.html \
+    --form-values form-values.yaml \
+    --submit
+```
+
+Expected output:
+```
+IRmark is hOgMwO+75eJbBax/OhPZy/NszxE=
+Correlation ID is 1E242
+Endpoint is http://localhost:8082/
+Poll...
+Poll...
+Poll...
+Poll...
+Submitted successfully.
+Delete request...
+Completed.
+```
+
+### 2. Test-In-Live (real HMRC, test data)
+
+Test-In-Live submits to the real HMRC endpoint using the `HMRC-CT-CT600-TIL`
+message class.  HMRC accepts and validates the submission but does not
+process it as a real tax return.  If the submission is successful, you
+also get an email confirming this.  I think this is sent to the email
+address associated with the HMRC account.
+
+You need real Government Gateway credentials (`username` and `password`)
+for this — these are the same credentials you use to log in to HMRC online
+services.
+
+> **Warning:** Government Gateway credentials are stored in clear text in
+> the config file.  Do not commit them to version control.  Use your own
+> `config.json` (which is gitignored) or be careful with `config-til.json`.
+
+The required config settings are:
+
+| Field | Value |
+|---|---|
+| `gateway-test` | `"0"` |
+| `class` | `HMRC-CT-CT600-TIL` |
+| `url` | `https://transaction-engine.tax.service.gov.uk/submission` |
+
+These are already set in `config-til.json`.
+
+```
+ct600 \
+    --config config-til.json \
+    --accounts accts.html \
+    --computations ct.html \
+    --form-values form-values.yaml \
+    --submit
+```
+
+### 3. Production
+
+> **Warning:** This submits a real Corporation Tax return to HMRC.
+> Make sure your data is correct before submitting.
+
+You need real Government Gateway credentials, as with Test-In-Live.
+The same warning about storing credentials in clear text applies.
+
+The required config settings are:
+
+| Field | Value |
+|---|---|
+| `gateway-test` | `"0"` |
+| `class` | `HMRC-CT-CT600` |
+| `url` | `https://transaction-engine.tax.service.gov.uk/submission` |
+
+These are already set in `config-prod.json`.
+
+```
+ct600 \
+    --config config-prod.json \
     --accounts accts.html \
     --computations ct.html \
     --form-values form-values.yaml \
@@ -100,59 +242,28 @@ submitted:
 
 https://github.com/cybermaggedon/ct600-fill
 
-## Status
-
-This is a command-line utility, which has been tested with the HMRC test API,
-as well as used for live submission.
-
-## Credentials
-
-In order to use this, you need production credentials (vendor ID, username,
-password) for the Corporation Tax API.  HMRC does not permit these
-credentials to be shared publicly.
-
-Developer hub: 
-https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub
-
 ## Installing
 
 ```
 pip3 install .
 ```
 
-## Testing
+## Credentials
 
-As well as the proper HMRC test systems, this packages includes an
-extremely basic corptax emulator here.  It includes some validation
-of the CT600 using HMRC supplied schemas.  Run:
+For Test-In-Live and production filing, the `username` and `password` in
+your config file are just your Government Gateway credentials — the same
+ones you use to log in to HMRC online services.  You do not need to
+register as a developer to use Test-In-Live or to file live returns.
 
-```
-scripts/corptax-test-service
-```
+The `vendor-id` is a developer credential.  I am registered as an HMRC
+developer and have been issued a vendor ID.  HMRC does not permit these
+credentials to be shared publicly.
 
-To submit the test account data to the test service:
+HMRC also provides separate test systems intended for developers.  You
+should only use these if you have been given access through the developer
+hub:
 
-```
-ct600 -c config.json -a accts.html -t ct600.html --submit
-```
-
-Output should look like this:
-```
-IRmark is hOgMwO+75eJbBax/OhPZy/NszxE=
-Correlation ID is 1E242
-Endpoint is http://localhost:8082/
-Poll time is 1.0
-Poll...
-Poll...
-Poll...
-Poll...
-Submitted successfully.
-Delete request...
-Completed.
-```
-
-The two files `accts.html` and `ct600.html` included in this repo
-are sample accounts which were output from `ixbrl-reporter-jsonnet`.
+https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub
 
 ## Usage
 
@@ -162,7 +273,7 @@ usage: ct600 [-h] [--config CONFIG] [--accounts ACCOUNTS]
              [--attachment ATTACHMENT] [--output-ct] [--output-values]
              [--output-form-values] [--submit] [--data-request]
 
-Submittion to HMRC Corporation Tax API
+Submission to HMRC Corporation Tax API
 
 options:
   -h, --help            show this help message and exit
@@ -183,29 +294,6 @@ options:
   --data-request        Perform a data request for outstanding items
 ```
 
-The configuration file is a JSON file, should look something like this:
-
-```
-{
-    "company-type": 6,
-    "declaration-name": "Sarah McAcre",
-    "declaration-status": "Director",
-    "username": "CTUser100",
-    "password": "password",
-    "gateway-test": "1",
-    "tax-reference": "1234123412",
-    "vendor-id": "1234",
-    "software": "ct600",
-    "software-version": "0.0.1",
-    "url": "http://localhost:8081/",
-    "title": "Ms",
-    "first-name": "Sarah",
-    "second-name": "McAcre",
-    "email": "sarah@example.org",
-    "phone": "447900123456"
-}
-```
-
 # Licences, Compliance, etc.
 
 ## Warranty
@@ -219,7 +307,7 @@ purposes.  Really, you should check with a qualified accountant.
 
 ## Licence
 
-Copyright (C) 2020, 2021, Cyberapocalypse Limited
+Copyright (C) 2020-2026, Cyberapocalypse Limited
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

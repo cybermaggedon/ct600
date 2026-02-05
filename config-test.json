@@ -1,0 +1,17 @@
+{
+    "company-type": 6,
+    "declaration-name": "Sarah McAcre",
+    "declaration-status": "Director",
+    "username": "govidgoeshere",
+    "password": "passwordgoeshere",
+    "gateway-test": "1",
+    "class": "HMRC-CT-CT600-TIL",
+    "vendor-id": "1234",
+    "url": "http://localhost:8081/",
+    "title": "Ms",
+    "first-name": "Sarah",
+    "second-name": "McAcre",
+    "email": "sarah@example.org",
+    "phone": "447900123456",
+    "timestamp": "2022-03-31T00:00:00"
+}
