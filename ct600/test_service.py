@@ -10,6 +10,7 @@ import json
 import copy
 import base64
 import xml.etree.ElementTree as ET
+from lxml import etree as lxml_ET
 
 try:
     import xmlschema
@@ -94,8 +95,8 @@ class Api:
         print("Submission with correlation ID %s has processed successfully" %
               corr_id)
 
-        sr = ET.Element(sr_SuccessResponse)
-        msg = ET.SubElement(sr, sr_Message)
+        sr = lxml_ET.Element(sr_SuccessResponse)
+        msg = lxml_ET.SubElement(sr, sr_Message)
         msg.text = "Submission processed successfully"
         msg.set("code", "0000")
 
