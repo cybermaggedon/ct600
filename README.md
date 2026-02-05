@@ -250,11 +250,19 @@ pip3 install .
 
 ## Credentials
 
-In order to use this, you need production credentials (vendor ID, username,
-password) for the Corporation Tax API.  HMRC does not permit these
+For Test-In-Live and production filing, the `username` and `password` in
+your config file are just your Government Gateway credentials — the same
+ones you use to log in to HMRC online services.  You do not need to
+register as a developer to use Test-In-Live or to file live returns.
+
+The `vendor-id` is a developer credential.  I am registered as an HMRC
+developer and have been issued a vendor ID.  HMRC does not permit these
 credentials to be shared publicly.
 
-Developer hub:
+HMRC also provides separate test systems intended for developers.  You
+should only use these if you have been given access through the developer
+hub:
+
 https://developer.service.hmrc.gov.uk/api-documentation/docs/using-the-hub
 
 ## Usage
@@ -299,7 +307,7 @@ purposes.  Really, you should check with a qualified accountant.
 
 ## Licence
 
-Copyright (C) 2020, 2021, Cyberapocalypse Limited
+Copyright (C) 2020-2026, Cyberapocalypse Limited
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
