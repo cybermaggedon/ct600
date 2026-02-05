@@ -177,7 +177,23 @@ process it as a real tax return.  If the submission is successful, you
 also get an email confirming this.  I think this is sent to the email
 address associated with the HMRC account.
 
-You need valid HMRC developer credentials for this.
+You need real Government Gateway credentials (`username` and `password`)
+for this — these are the same credentials you use to log in to HMRC online
+services.
+
+> **Warning:** Government Gateway credentials are stored in clear text in
+> the config file.  Do not commit them to version control.  Use your own
+> `config.json` (which is gitignored) or be careful with `config-til.json`.
+
+The required config settings are:
+
+| Field | Value |
+|---|---|
+| `gateway-test` | `"0"` |
+| `class` | `HMRC-CT-CT600-TIL` |
+| `url` | `https://transaction-engine.tax.service.gov.uk/submission` |
+
+These are already set in `config-til.json`.
 
 ```
 ct600 \
@@ -192,6 +208,19 @@ ct600 \
 
 > **Warning:** This submits a real Corporation Tax return to HMRC.
 > Make sure your data is correct before submitting.
+
+You need real Government Gateway credentials, as with Test-In-Live.
+The same warning about storing credentials in clear text applies.
+
+The required config settings are:
+
+| Field | Value |
+|---|---|
+| `gateway-test` | `"0"` |
+| `class` | `HMRC-CT-CT600` |
+| `url` | `https://transaction-engine.tax.service.gov.uk/submission` |
+
+These are already set in `config-prod.json`.
 
 ```
 ct600 \
