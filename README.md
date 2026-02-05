@@ -160,7 +160,6 @@ Expected output:
 IRmark is hOgMwO+75eJbBax/OhPZy/NszxE=
 Correlation ID is 1E242
 Endpoint is http://localhost:8082/
-Poll time is 1.0
 Poll...
 Poll...
 Poll...
@@ -174,7 +173,9 @@ Completed.
 
 Test-In-Live submits to the real HMRC endpoint using the `HMRC-CT-CT600-TIL`
 message class.  HMRC accepts and validates the submission but does not
-process it as a real tax return.
+process it as a real tax return.  If the submission is successful, you
+also get an email confirming this.  I think this is sent to the email
+address associated with the HMRC account.
 
 You need valid HMRC developer credentials for this.
 
