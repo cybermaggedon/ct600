@@ -246,3 +246,74 @@ class TestDeleteRequest:
             assert delete_resp is not None
         except Exception:
             pass
+
+
+class TestGovTalkSubmissionErrorDetails:
+    """Test decoding of departmental ErrorResponse details."""
+
+    ERROR_XML = """<GovTalkMessage xmlns="http://www.govtalk.gov.uk/CM/envelope">
+  <EnvelopeVersion>2.0</EnvelopeVersion>
+  <Header>
+    <MessageDetails>
+      <Class>HMRC-CT-CT600</Class>
+      <Qualifier>error</Qualifier>
+      <Function>submit</Function>
+      <TransactionID></TransactionID>
+      <CorrelationID>F698DABCA16B42898B65B5E237F57342</CorrelationID>
+      <ResponseEndPoint PollInterval="10">https://test-transaction-engine.tax.service.gov.uk/submission</ResponseEndPoint>
+      <GatewayTimestamp>2026-08-05T01:05:32.871</GatewayTimestamp>
+    </MessageDetails>
+    <SenderDetails/>
+  </Header>
+  <GovTalkDetails>
+    <Keys></Keys>
+    <GovTalkErrors>
+      <Error>
+        <RaisedBy>Department</RaisedBy>
+        <Number>3001</Number>
+        <Type>business</Type>
+        <Text>The submission of this document has failed due to departmental specific business logic in the Body tag.</Text>
+      </Error>
+    </GovTalkErrors>
+  </GovTalkDetails>
+  <Body>
+    <ErrorResponse xmlns="http://www.govtalk.gov.uk/CM/errorresponse" SchemaVersion="2.0">
+      <Application><MessageCount>2</MessageCount></Application>
+      <Error>
+        <RaisedBy>ChRIS</RaisedBy>
+        <Number>9240</Number>
+        <Type>business</Type>
+        <Text>If the associated companies section is present then either Box 326 or Boxes 327 and 328 must be completed.</Text>
+        <Location>/hd:GovTalkMessage[1]/hd:Body[1]/ct:IRenvelope[1]</Location>
+      </Error>
+      <Error>
+        <RaisedBy>ChRIS</RaisedBy>
+        <Number>0</Number>
+        <Type>xbrl.core.xml.SchemaValidationError.cvc-datatype-valid_1_2_1</Type>
+        <Text>cvc-datatype-valid.1.2.1: '' is not a valid value for 'gYear'.</Text>
+        <Location>Computations</Location>
+      </Error>
+    </ErrorResponse>
+  </Body>
+</GovTalkMessage>"""
+
+    def test_decode_error_details(self):
+        """Decode a departmental error response carrying ErrorResponse detail."""
+        msg = GovTalkMessage.decode(self.ERROR_XML)
+        assert isinstance(msg, GovTalkSubmissionError)
+        assert msg.get("error-number") == "3001"
+        assert msg.get("error-text").startswith(
+            "The submission of this document has failed"
+        )
+
+        details = msg.get("error-details")
+        assert len(details) == 2
+        assert details[0]["raised-by"] == "ChRIS"
+        assert details[0]["number"] == "9240"
+        assert details[0]["text"].startswith(
+            "If the associated companies section"
+        )
+        assert details[0]["location"].startswith("/hd:GovTalkMessage")
+        assert details[1]["type"].startswith(
+            "xbrl.core.xml.SchemaValidationError"
+        )
