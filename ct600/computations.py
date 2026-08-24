@@ -261,10 +261,13 @@ class Computations:
         return self.value(val)
 
     def fy2(self):
-        
-        val = self.company_period_context().values[
-            ET.QName(CT_NS, "FinancialYear2CoveredByTheReturn")
-        ]
+        # Absent for accounting periods within a single financial year.
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "FinancialYear2CoveredByTheReturn")
+            ]
+        except KeyError:
+            return None
 
         return self.value(val)
 
@@ -277,10 +280,12 @@ class Computations:
         return self.value(val)
 
     def fy2_profit(self):
-        
-        val = self.company_period_context().values[
-            ET.QName(CT_NS, "FY2AmountOfProfitChargeableAtFirstRate")
-        ]
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "FY2AmountOfProfitChargeableAtFirstRate")
+            ]
+        except KeyError:
+            return None
 
         return self.value(val)
 
@@ -293,10 +298,12 @@ class Computations:
         return self.value(val)
 
     def fy2_tax_rate(self):
-        
-        val = self.company_period_context().values[
-            ET.QName(CT_NS, "FY2FirstRateOfTax")
-        ]
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "FY2FirstRateOfTax")
+            ]
+        except KeyError:
+            return None
 
         return self.value(val)
 
@@ -309,10 +316,12 @@ class Computations:
         return self.value(val)
 
     def fy2_tax(self):
-        
-        val = self.company_period_context().values[
-            ET.QName(CT_NS, "FY2TaxAtFirstRate")
-        ]
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "FY2TaxAtFirstRate")
+            ]
+        except KeyError:
+            return None
 
         return self.value(val)
 
