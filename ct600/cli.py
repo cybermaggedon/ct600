@@ -307,7 +307,7 @@ class CT600CLI:
             print("\nOperation cancelled by user", file=sys.stderr)
             sys.exit(1)
         except Exception as e:
-            print(f"Unexpected error: {str(e)}", file=sys.stderr)
+            print(f"Unexpected error: {e!r}", file=sys.stderr)
             sys.exit(1)
 
 
