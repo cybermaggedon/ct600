@@ -220,6 +220,21 @@ class Computations:
 
         return self.value(val)
 
+    def non_trading_loan_profits(self):
+        # Box 170: bank interest and other profits from non-trading loan
+        # relationships, reported separately from trading profits.
+        try:
+            val = self.company_period_context().values[
+                ET.QName(
+                    CT_NS, "ProfitsAndGainsFromNon-tradingLoanRelationships"
+                )
+            ]
+        except KeyError:
+            return None
+
+        v = self.value(val)
+        return v if v else None
+
     def net_chargeable_gains(self):
         
         val = self.company_period_context().values[
@@ -473,7 +488,9 @@ class Computations:
             Definition(165, "Net trading profits").set(
                 self.net_trading_profits()
             ),
-            Definition(170, "Bank, building society or other interest, and profits from non-trading loan relationships"),
+            Definition(170, "Bank, building society or other interest, and profits from non-trading loan relationships").set(
+                self.non_trading_loan_profits()
+            ),
             Definition(172, "Box 170 net of carrying back deficit"),
             Definition(175, "Annual payments not otherwise charged to Corporation Tax and from which Income Tax has not been deducted"),
             Definition(180, "Non-exempt dividends or distributions from non-UK resident companies"),
