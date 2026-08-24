@@ -62,6 +62,14 @@ sr_ns = "http://www.inlandrevenue.gov.uk/SuccessResponse"
 sr_SuccessResponse = "{%s}SuccessResponse" % sr_ns
 sr_Message = "{%s}Message" % sr_ns
 
+er_ns = "http://www.govtalk.gov.uk/CM/errorresponse"
+er_Error = "{%s}Error" % er_ns
+er_RaisedBy = "{%s}RaisedBy" % er_ns
+er_Number = "{%s}Number" % er_ns
+er_Type = "{%s}Type" % er_ns
+er_Text = "{%s}Text" % er_ns
+er_Location = "{%s}Location" % er_ns
+
 class Message:
     def __init__(self):
         pass
@@ -485,6 +493,27 @@ class GovTalkSubmissionError(GovTalkMessage):
             self.params["error-location"] = e.find(e_Location).text
         except:
             pass
+
+        # Departmental validation detail (e.g. HMRC's ChRIS rules
+        # engine) arrives as an ErrorResponse in the Body, one Error
+        # element per failure.
+        self.params["error-details"] = []
+        body = root.find(e_Body)
+        if body is not None:
+            for err in body.findall(".//" + er_Error):
+                detail = {}
+                for key, elt in (
+                    ("raised-by", er_RaisedBy),
+                    ("number", er_Number),
+                    ("type", er_Type),
+                    ("text", er_Text),
+                    ("location", er_Location),
+                ):
+                    try:
+                        detail[key] = err.find(elt).text
+                    except:
+                        pass
+                self.params["error-details"].append(detail)
 
     def create_govtalk_details(self, root):
 

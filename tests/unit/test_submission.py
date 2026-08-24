@@ -145,7 +145,10 @@ class TestSubmissionManager:
         mock_session.post.return_value = AsyncContextManagerMock(mock_response)
         
         mock_error_message = Mock(spec=GovTalkSubmissionError)
-        mock_error_message.get.return_value = "Invalid request format"
+        mock_error_message.get.side_effect = lambda key, default=None: {
+            "error-text": "Invalid request format",
+            "error-details": [],
+        }.get(key, default)
         
         with patch('aiohttp.ClientSession') as mock_client_session:
             mock_client_session.return_value = AsyncContextManagerMock(mock_session)
