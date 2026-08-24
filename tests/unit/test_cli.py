@@ -500,7 +500,10 @@ class TestCLIRun:
                     with patch('builtins.print') as mock_print:
                         cli.run(["--output-values"])
                 
-                mock_print.assert_called_with("Unexpected error: Unexpected error", file=sys.stderr)
+                mock_print.assert_called_with(
+                    "Unexpected error: ValueError('Unexpected error')",
+                    file=sys.stderr
+                )
                 mock_exit.assert_called_with(1)
 
 
