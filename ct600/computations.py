@@ -324,6 +324,44 @@ class Computations:
 
         return self.value(val)
 
+    def marginal_relief(self):
+        # Box 435 was renamed to plain "Marginal relief" from April 2023,
+        # when marginal relief for profits between the small profits and
+        # main rate limits was reintroduced; the taxonomy concept keeps
+        # the legacy ring-fence name.
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "MarginalRateReliefForRingFenceTradesPayable")
+            ]
+        except KeyError:
+            return None
+
+        v = self.value(val)
+        return v if v else None
+
+    def corporation_tax_chargeable_payable(self):
+        # Box 440: Corporation Tax net of marginal relief. Falls back to
+        # the gross figure for computations without marginal relief facts.
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "CorporationTaxChargeablePayable")
+            ]
+        except KeyError:
+            return self.corporation_tax_chargeable()
+
+        return self.value(val)
+
+    def net_corporation_tax_payable(self):
+        # Box 475: Net Corporation Tax liability.
+        try:
+            val = self.company_period_context().values[
+                ET.QName(CT_NS, "NetCorporationTaxPayable")
+            ]
+        except KeyError:
+            return self.corporation_tax_chargeable()
+
+        return self.value(val)
+
     def tax_chargeable(self):
         
         val = self.company_period_context().values[
@@ -495,9 +533,9 @@ class Computations:
             Definition(430, "Corporation Tax").set(
                 self.corporation_tax_chargeable()
             ),
-            Definition(435, "Marginal relief for ring fence trades"),
+            Definition(435, "Marginal relief").set(self.marginal_relief()),
             Definition(440, "Corporation Tax chargeable").set(
-                self.corporation_tax_chargeable()
+                self.corporation_tax_chargeable_payable()
             ),
             Definition(445, "Community Investment relief"),
             Definition(450, "Double Taxation Relief"),
@@ -511,7 +549,7 @@ class Computations:
             Definition(474, "Other Coronavirus overpayments"),
             Definition(986, "Energy (Oil and Gas) Profits Levy"),
             Definition(475, "Net Corporation Tax liability").set(
-                self.corporation_tax_chargeable()
+                self.net_corporation_tax_payable()
             ),
             Definition(480, "Tax payable on loans and arrangements to participators"),
             Definition(485, "Put an X in box 485 if you completed box A70 in the supplementary pages CT600A"),
