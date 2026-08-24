@@ -3,6 +3,7 @@
 from ct600.govtalk import *
 from ct600.ixbrl import get_values
 
+import os
 import time
 import asyncio
 from aiohttp import web
@@ -183,6 +184,10 @@ class Api:
             print("Exception:", e)
             print("IRmark is invalid")
 #            raise RuntimeError("IRmark is invalid")
+
+        # The decoded submission documents are dumped here for
+        # inspection; make sure the directory exists.
+        os.makedirs("received", exist_ok=True)
 
         for elt in ire.findall(".//ct:Computation//ct:EncodedInlineXBRLDocument", {"ct": ct5_ns}):
             comps = base64.b64decode(elt.text)
