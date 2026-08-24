@@ -128,10 +128,29 @@ class SubmissionManager:
                 
                 if isinstance(message, GovTalkSubmissionError):
                     print(response_data)
+                    self._print_error_details(message)
                     error_text = message.get("error-text")
                     raise SubmissionError(error_text)
                 
                 return message
+
+    def _print_error_details(self, message: GovTalkSubmissionError) -> None:
+        """Print departmental error details from an error response.
+        
+        Args:
+            message: The error response message
+        """
+        for err in message.get("error-details", []):
+            print("- Error " + "-" * (OUTPUT_LINE_LENGTH - 8))
+            print("%s error %s (%s)" % (
+                err.get("raised-by", "?"),
+                err.get("number", "?"),
+                err.get("type", "?")
+            ))
+            if err.get("text"):
+                print(err["text"])
+            if err.get("location"):
+                print("Location: " + err["location"])
     
     def _print_success_messages(self, response: GovTalkSubmissionResponse) -> None:
         """Print success messages from response.
