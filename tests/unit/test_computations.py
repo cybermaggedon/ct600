@@ -550,6 +550,7 @@ class TestComputations:
             patch.object(mock_computations, 'end', return_value="2023-12-31"),
             patch.object(mock_computations, 'turnover_revenue', return_value=1000000),
             patch.object(mock_computations, 'net_trading_profits', return_value=70000),
+            patch.object(mock_computations, 'non_trading_loan_profits', return_value=None),
             patch.object(mock_computations, 'profits_before_other_deductions_and_reliefs', return_value=65000),
             patch.object(mock_computations, 'profits_before_charges_and_group_relief', return_value=60000),
             patch.object(mock_computations, 'total_profits_chargeable_to_corporation_tax', return_value=55000),
