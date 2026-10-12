@@ -199,7 +199,7 @@ class GovTalkMessage(Message):
             return self.params[id]
 
         return default
-         
+
     def ir_envelope(self):
         return self.params["ir-envelope"]
 
