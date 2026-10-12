@@ -485,7 +485,7 @@ class TestConfigurationValidation:
             config_data["url"] = url
             config = CT600Config(config_data)  # Should not raise
             # submission_url returns default when url is empty/None
-            assert config.submission_url == "http://localhost:8081/"
+            assert config.submission_url == "https://transaction-engine.tax.service.gov.uk/submission"
 
 
     def test_gateway_test_defaults_when_missing(self):
@@ -502,7 +502,7 @@ class TestConfigurationValidation:
         assert config.is_test_gateway is True
 
     def test_default_submission_url_when_no_url(self):
-        """Test that submission_url defaults to localhost when no URL provided."""
+        """Test that submission_url defaults to HMRC production when no URL provided."""
         config_data = {
             "username": "test_user",
             "password": "test_pass",
@@ -510,7 +510,7 @@ class TestConfigurationValidation:
         }
 
         config = CT600Config(config_data)
-        assert config.submission_url == "http://localhost:8081/"
+        assert config.submission_url == "https://transaction-engine.tax.service.gov.uk/submission"
 
 
 class TestConfigurationIntegration:

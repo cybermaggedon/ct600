@@ -294,6 +294,35 @@ options:
   --data-request        Perform a data request for outstanding items
 ```
 
+The configuration file is a JSON file, should look something like this:
+
+```
+{
+    "company-type": 6,
+    "declaration-name": "Sarah McAcre",
+    "declaration-status": "Director",
+    "username": "CTUser100",
+    "password": "password",
+    "gateway-test": false,
+    "tax-reference": "1234123412",
+    "vendor-id": "1234",
+    "title": "Ms",
+    "first-name": "Sarah",
+    "second-name": "McAcre",
+    "email": "sarah@example.org",
+    "phone": "447900123456"
+}
+```
+
+The `url` field is optional and defaults to the HMRC production endpoint:
+`https://transaction-engine.tax.service.gov.uk/submission`
+
+For testing with the local test service, override with:
+```
+"url": "http://localhost:8081/"
+```
+
+
 # Licences, Compliance, etc.
 
 ## Warranty
